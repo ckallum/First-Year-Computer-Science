@@ -59,11 +59,10 @@ void testStringCheck() {
 }
 
 void testStringEval(){
-  assert(stringEval(1,"2")==2);
-  assert(stringEval(2,"10")==10);
-  assert(stringEval(3,"100")==100);
-  assert(stringEval(4,"1000")==1000);
-  assert(stringEval(1,"23423452")==23423452);
+  // assert(stringEval(3,"aba",NULL)=='ab');
+  // assert(stringEval(5,"abcab",NULL)=='abc');
+  // assert(stringEval(7,"wxysabc",NULL)=='wxys');
+  // assert(stringEval(4,"a",NULL)=='a');
 }
 
 // // Run tests on the stringCheck function.
