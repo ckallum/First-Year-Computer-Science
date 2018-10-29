@@ -60,7 +60,7 @@ void test() {
 // Run the program or, if there are no arguments, test it.
 int main(int n, char *strArray[n]) {
     setbuf(stdout, NULL);
-    char b[100];
+    char b[2147483647];
 
     if (n == 1) {
         test();
