@@ -8,7 +8,8 @@ in a string*/
 #include <assert.h>
 
 // stringCheck a string into an integer.  Return False if it is not valid.
-int stringCheck(int n, const char inputStr[]) {
+int stringCheck(const char inputStr[]) {
+  int n = strlen(inputStr);
   if (n>0 && n<100){
     for (int i=0; i<n; i++){
       if (!isalpha(inputStr[i])) return -1;
@@ -48,30 +49,50 @@ char *stringEval(int inputLen, char inputStr[], char subString[]) {
 }
 
 void testStringCheck() {
+  assert(stringCheck("a")==1);
+  assert(stringCheck("ab")==1);
+  assert(stringCheck("zxy")==1);
+  assert(stringCheck("")==-1);
+  assert(stringCheck("2")==-1);
+  assert(stringCheck("x0")==-1);
+  assert(stringCheck("abc5d")==-1);
+}
 
+void testStringEval(){
+  assert(stringEval(1,"2")==2);
+  assert(stringEval(2,"10")==10);
+  assert(stringEval(3,"100")==100);
+  assert(stringEval(4,"1000")==1000);
+  assert(stringEval(1,"23423452")==23423452);
 }
 
 // // Run tests on the stringCheck function.
 void test() {
     testStringCheck();
+    testStringEval();
     printf("All tests passed\n");
 }
 
 // Run the program or, if there are no arguments, test it.
 int main(int n, char *strArray[n]) {
     setbuf(stdout, NULL);
-    char b[2147483647];
+    char b[100];
 
     if (n == 1) {
         test();
     }
     else if (n >1) {
+      int printCheck = stringCheck(strArray[1]);
+      if (printCheck == 1){
         printf("%s\n",stringEval(strlen(strArray[1]),strArray[1],b));
-        printf("%d\n",stringCheck(strlen(strArray[1]), strArray[1]));
+      }
+      else {
+        printf("Input is invalid\n");
+      }
     }
-    else {
+    else{
         fprintf(stderr, "Use e.g.: ./StringEvaluation abcdefg\n");
         exit(1);
     }
-    return 0;
+  return 0;
 }
