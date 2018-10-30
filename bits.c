@@ -5,22 +5,43 @@
 #include <assert.h>
 
 // Construct a colour from its components.
-unsigned int colour(int r, int g, int b, int a) {
-    int rgba = ((r & 0xFFFF)<<16)|(g<<8)|b ;
+unsigned int colour(long r, long g, long b, long a) {
+    size_t rgba = ((r & 0xFF)<<24)|((g & 0xFF)<<16)|((b & 0xFF)<<8)|(a & 0xFF);
     return rgba;
 }
 
 // Unpack a colour into its components.
 void components(unsigned int c, int rgba[4]) {
+  rgba[0] = (c>>24) & 0xFF;
+  rgba[1] = (c>>16) & 0xFF;
+  rgba[2] = (c>>8)  & 0xFF;
+  rgba[3] = c & 0xFF;
 }
 
 // Form a 3D point from three signed 10-bit integers.
 unsigned int point(int x, int y, int z) {
-    return 0;
+  int pointStr = ((x & 0x3FF) << 20) | ((y & 0x3FF)<<10)|((z & 0x3FF));
+  return pointStr;
 }
 
 // Separate a position into three signed 10-bit coordinates.
 void coordinates(unsigned int p, int xyz[3]) {
+  int x = (p>>20) & 0x3FF;
+  if ((x & 0x200) != 0){
+    x = (~0U << 10)|x;
+  }
+  xyz[0] = x;
+  int y = (p>>10) & 0x3FF;
+  if ((y & 0x200) != 0){
+    y = (~0U << 10)|y;
+  }
+  xyz[1] = y;
+  int z = p & 0x3FF;
+  if ((z & 0x200) != 0){
+    z = (~0U << 10)|z;
+  }
+  xyz[2] = z;
+
 }
 
 // Convert an int into a binary string of 32 bits.
@@ -36,7 +57,12 @@ void binary(int n, char s[33]) {
 
 // Convert an int into a hex string of 8 hex digits.
 void hex(int n, char s[9]) {
-  0x80000000
+  char hexCheck[]= {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F','\0'};
+  s[8] = '\0';
+  for (int i = 0; i < 8 ; i++){
+    int j = (n >> (4*(7-i)) & 0xF);
+    s[i] = hexCheck[j];
+  }
 }
 
 // ----------------------------------------------------------------------------
@@ -156,7 +182,7 @@ void test() {
     testCoordinates();
     testBinary();
     testHex();
-    printf("All tests pass");
+    printf("All tests pass\n");
 }
 
 // Print a number in binary.
