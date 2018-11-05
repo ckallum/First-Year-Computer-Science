@@ -87,12 +87,25 @@ player line(player p0, player p1, player p2) {
 
 // Check whether a player has won, and return the winning player.
 player win(game *g) {
+  for (int i = 0; i < 3; i++){
+    if (g -> grid[i][0] == g -> grid[i][1] && g -> grid[i][1] == g -> grid[i][2] && g -> grid[i][1] ==X) return X;
+    if (g -> grid[i][0] == g -> grid[i][1] && g -> grid[i][1] == g -> grid[i][2] && g -> grid[i][1] ==O) return O;
+  }
+  for (int j = 0; j < 3; j++){
+    if (g -> grid[0][j] == g -> grid[1][j] && g -> grid[1][j] == g -> grid[2][j] && g -> grid[0][j] ==X) return X;
+    if (g -> grid[0][j] == g -> grid[1][j] && g -> grid[1][j] == g -> grid[2][j] && g -> grid[0][j] ==O) return O;
+  }
 
+  if (g -> grid [0][0] == g-> grid [1][1] && g -> grid [1][1] == g -> grid [2][2] && g -> grid[0][0]==X) return X;
+  if (g -> grid [0][0] == g-> grid [1][1] && g -> grid [1][1] == g -> grid [2][2] && g -> grid[0][0]==O) return O;
+  if (g -> grid [0][2] == g-> grid [1][1] && g -> grid [1][1] == g -> grid [2][0] && g -> grid[0][2]==X) return X;
+  if (g -> grid [0][2] == g-> grid [1][1] && g -> grid [1][1] == g -> grid [2][0] && g -> grid[0][2]==O) return O;
     return N;
 }
 
 // Check whether the game has ended in a draw.
 bool draw(game *g) {
+  if (g -> moves == 9) return true;
     return false;
 }
 
