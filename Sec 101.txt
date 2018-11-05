@@ -1,0 +1,18 @@
+Facebook and Data Breaches, What a Shocker..
+	Data scandals, data breaches and even more data breaches. There's been no doubt that 2018 has  been a rough year for Facebook, one of the world's largest social media sites with over 2 billion user logins per month. Recently the company has seen itself being constantly  thrown into the limelight for taking a blind eye to protecting and giving away their users data.
+
+Cambridge Analytica 
+	The catalyst for the scrutiny brought upon Facebook was the Cambridge Analytica(CA for short) scandal. Facebook fell short of ensuring the data CA accumulated was dealt with correctly. It was found that data from a survey/quiz Facebook ran in 2014 was being sold to data brokers to influence the political elections in the US and the UK. Personally, I've never trusted surveys due the uneasy feeling of giving away your personal information whilst having no real guarantee on what it's going to be used for even if it is seems harmless.  However, nowadays it's not surprising to me that people would mindlessly enter into a survey if a small incentive/reward was given to them for doing so, I shamefully admit I have fallen into this trap before.
+
+T&C's
+	Facebook has also been scrutinised for  the obscure terms and conditions that they force their user's to sign to be able to use the website whilst legally allowing over 60 companies exclusive privileges to harvest user data.  Personally, ticking the 'I accept to these terms and conditions' button has always caused some sense of anxiety and exploitation. Knowing that you are signing a document that was probably purposefully made to be dull so no one would read it yet it concerning the handling of their privacy and data is more than a bit disconcerting. Yet still no one, including me, reads it and ticks the button anyway. 
+
+However...
+	I consider myself a more cautious person when it comes to sharing my data. This is due to my parent's being skeptical about everything which has rubbed off on me, especially when sharing personal information such as names, email addresses and birthdays . A takeaway from data security being constantly in the news is that it has opened my eyes and societies eyes on why you should take care of your data and how valuable it is. Companies and users alike are visibly taking more steps to be transparent and mindful about user data.
+
+BBC (2018, July 11) Facebook faces £500,000 fine from UK data watchdog. Retrieved From:
+https://www.bbc.co.uk/news/business-44379593
+
+BBC (2018, June 6) Facebook confirms data-sharing agreements with Chinese firms. Retrieved From: https://www.bbc.co.uk/news/technology-44785151 
+
+
