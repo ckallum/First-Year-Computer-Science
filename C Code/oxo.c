@@ -32,40 +32,80 @@ typedef struct game game;
 
 // Initialize a game, with the given player to move first.
 void newGame(game *g, player first) {
+  for (int i = 0; i < 3; i++){
+    for ( int j = 0; j<3; j++){
+      g -> grid[i][j] = N;
+    }
+  }
+  if (first == X){
+    g -> next = X;
+  }
+  else g -> next = O;
+  g -> moves = 0;
 }
 
 // Convert the letter in a valid move string such as "b2" into a row index.
 int row(char *text) {
+  if (text[0] == 'a') return 0;
+  if (text[0] == 'b') return 1;
+  if (text[0] == 'c') return 2;
     return -1;
 }
 
 // Convert the digit in a valid move string such as "b2" into a column index.
 int col(char *text) {
+  if (text[1] == '1') return 0;
+  if (text[1] == '2') return 1;
+  if (text[1] == '3') return 2;
     return -1;
 }
 
 // Check whether a move string typed in by the user such as "b2" is valid, and
 // the corresponding cell is available.  Return a validity code.
 validity valid(game *g, char *text) {
-    return OK;
+  if (strlen(text) != 2) return BadFormat;
+  if (row(text)==-1) return BadLetter;
+  if (col(text)==-1) return BadDigit;
+  if (g -> grid[row(text)][col(text)] != N) return BadCell;
+  return OK;
 }
 
 // Make a move at the given valid position.
 void move(game *g, int r, int c) {
+  g -> grid[r][c] = g -> next;
+  if (g -> next == X) g -> next = O;
+  else g-> next = X;
+  g-> moves = g-> moves +1;
 }
 
 // Check if the given line is a winning one, and return the winning player.
 player line(player p0, player p1, player p2) {
-    return N;
+  if (p0 == p1 && p1==p2 && p0 == X) return X;
+  if (p0 == p1 && p1 == p2 && p0 == O) return O;
+  return N;
 }
 
 // Check whether a player has won, and return the winning player.
 player win(game *g) {
+  for (int i = 0; i < 3; i++){
+    if (g -> grid[i][0] == g -> grid[i][1] && g -> grid[i][1] == g -> grid[i][2] && g -> grid[i][1] ==X) return X;
+    if (g -> grid[i][0] == g -> grid[i][1] && g -> grid[i][1] == g -> grid[i][2] && g -> grid[i][1] ==O) return O;
+  }
+  for (int j = 0; j < 3; j++){
+    if (g -> grid[0][j] == g -> grid[1][j] && g -> grid[1][j] == g -> grid[2][j] && g -> grid[0][j] ==X) return X;
+    if (g -> grid[0][j] == g -> grid[1][j] && g -> grid[1][j] == g -> grid[2][j] && g -> grid[0][j] ==O) return O;
+  }
+
+  if (g -> grid [0][0] == g-> grid [1][1] && g -> grid [1][1] == g -> grid [2][2] && g -> grid[0][0]==X) return X;
+  if (g -> grid [0][0] == g-> grid [1][1] && g -> grid [1][1] == g -> grid [2][2] && g -> grid[0][0]==O) return O;
+  if (g -> grid [0][2] == g-> grid [1][1] && g -> grid [1][1] == g -> grid [2][0] && g -> grid[0][2]==X) return X;
+  if (g -> grid [0][2] == g-> grid [1][1] && g -> grid [1][1] == g -> grid [2][0] && g -> grid[0][2]==O) return O;
     return N;
 }
 
 // Check whether the game has ended in a draw.
 bool draw(game *g) {
+  if (g -> moves == 9) return true;
     return false;
 }
 
