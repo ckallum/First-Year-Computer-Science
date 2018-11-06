@@ -45,6 +45,7 @@ char *stringEval(int inputLen, char inputStr[], char subString[]) {
   for (int c = 0; c < maxCount; c++){
       subString[c] = inputStr[startPos+c];
   }
+  // printf("%s\n", subString);
   return subString;
 }
 
@@ -59,10 +60,12 @@ void testStringCheck() {
 }
 
 void testStringEval(){
-  // assert(stringEval(3,"aba",NULL)=='ab');
-  // assert(stringEval(5,"abcab",NULL)=='abc');
-  // assert(stringEval(7,"wxysabc",NULL)=='wxys');
-  // assert(stringEval(4,"a",NULL)=='a');
+  char subString[100];
+  memset(subString,0, sizeof subString);
+  assert(stringEval(3,"aba",subString)=="ab");
+  assert(stringEval(5,"abcab",subString)=="abc");
+  assert(stringEval(7,"wxysabc",subString)=="wxy");
+  assert(stringEval(1,"a",subString)=="a");
 }
 
 // // Run tests on the stringCheck function.
@@ -75,7 +78,8 @@ void test() {
 // Run the program or, if there are no arguments, test it.
 int main(int n, char *strArray[n]) {
     setbuf(stdout, NULL);
-    char b[100];
+    char subString[100];
+    memset(subString,0, sizeof subString);
 
     if (n == 1) {
         test();
@@ -83,7 +87,7 @@ int main(int n, char *strArray[n]) {
     else if (n >1) {
       int printCheck = stringCheck(strArray[1]);
       if (printCheck == 1){
-        printf("%s\n",stringEval(strlen(strArray[1]),strArray[1],b));
+        printf("%s\n",stringEval(strlen(strArray[1]),strArray[1],subString));
       }
       else {
         printf("Input is invalid\n");
