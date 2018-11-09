@@ -34,7 +34,7 @@ char *stringEval(int inputLen, char inputStr[], char subString[]) {
 
   //Checks if this new alphabetical string is longer than the longest
     if (tempCount > maxCount){
-      printf("Start: %d, Length: %d\n", i, tempCount);
+      printf("Start at Index: %d, Length: %d\n", i, tempCount);
       maxCount = tempCount;
       startPos = i;
     }
@@ -59,18 +59,19 @@ void testStringCheck() {
   assert(stringCheck("abc5d")==-1);
 }
 
-// void testStringEval(){
-//   char subString[100];
-//   assert(stringEval(3,"aba",subString)=="ab");
-//   assert(stringEval(5,"abcab",subString)=="abc");
-//   assert(stringEval(7,"wxysabc",subString)=="wxy");
-//   assert(stringEval(1,"a",subString)=="a");
-// }
+void testStringEval(){
+  char subString[100];
+  memset(subString,0, sizeof subString);
+  assert(strcmp(stringEval(3,"aba",subString),"ab")==0);
+  assert(strcmp(stringEval(5,"abcab",subString),"abc")==0);
+  assert(strcmp(stringEval(6,"wxysab",subString),"wxy")==0);
+  assert(strcmp(stringEval(18,"abcdefgzqrstuvwxyz",subString),"qrstuvwxyz")==0);
+}
 
 // // Run tests on the stringCheck function.
 void test() {
     testStringCheck();
-    // testStringEval();
+    testStringEval();
     printf("All tests passed\n");
 }
 
@@ -92,9 +93,5 @@ int main(int n, char *strArray[n]) {
         printf("Input is invalid\n");
       }
     }
-    // else{
-    //     fprintf(stderr, "Use e.g.: ./StringEvaluation abcdefg\n");
-    //     exit(1);
-    // }
   return 0;
 }
