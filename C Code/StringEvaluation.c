@@ -48,7 +48,7 @@ char *stringEval(int inputLen, char inputStr[], char subString[]) {
   // printf("%s\n", subString);
   return subString;
 }
-//Tests if the input is in correct form
+//Tests if the input is in correct form//
 void testStringCheck() {
   assert(stringCheck("a")==1);
   assert(stringCheck("ab")==1);
