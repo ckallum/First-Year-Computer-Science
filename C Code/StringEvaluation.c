@@ -48,7 +48,7 @@ char *stringEval(int inputLen, char inputStr[], char subString[]) {
   // printf("%s\n", subString);
   return subString;
 }
-
+//Tests if the input is in correct form
 void testStringCheck() {
   assert(stringCheck("a")==1);
   assert(stringCheck("ab")==1);
@@ -58,7 +58,7 @@ void testStringCheck() {
   assert(stringCheck("x0")==-1);
   assert(stringCheck("abc5d")==-1);
 }
-
+// Tests if the result of the StringEval function corresponds to the correct result
 void testStringEval(){
   char subString[100];
   memset(subString,0, sizeof subString);
@@ -68,7 +68,7 @@ void testStringEval(){
   assert(strcmp(stringEval(18,"abcdefgzqrstuvwxyz",subString),"qrstuvwxyz")==0);
 }
 
-// // Run tests on the stringCheck function.
+//Run tests on the stringCheck and stringEval function.
 void test() {
     testStringCheck();
     testStringEval();
