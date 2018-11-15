@@ -88,22 +88,16 @@ player line(player p0, player p1, player p2) {
 // Check whether a player has won, and return the winning player.
 player win(game *g) {
   for (int i = 0; i < 3; i++){
-<<<<<<< HEAD
+
     char oxWin = line(g -> grid[i][0], g -> grid[i][1], g -> grid[i][2]);
     if (oxWin!= N) return oxWin;
   }
   for (int j = 0; j < 3; j++){
     char oxWin = line(g -> grid[0][j], g -> grid[1][j], g -> grid[2][j]);
     if (oxWin!= N) return oxWin;
-=======
-    if (g -> grid[i][0] == g -> grid[i][1] && g -> grid[i][1] == g -> grid[i][2] && g -> grid[i][1] ==X) return X;
-    if (g -> grid[i][0] == g -> grid[i][1] && g -> grid[i][1] == g -> grid[i][2] && g -> grid[i][1] ==O) return O;
+
   }
-  for (int j = 0; j < 3; j++){
-    if (g -> grid[0][j] == g -> grid[1][j] && g -> grid[1][j] == g -> grid[2][j] && g -> grid[0][j] ==X) return X;
-    if (g -> grid[0][j] == g -> grid[1][j] && g -> grid[1][j] == g -> grid[2][j] && g -> grid[0][j] ==O) return O;
->>>>>>> 4f6f9c70964957814d0cc5efd30bc75e11081d3e
-  }
+
 
   if (g -> grid [0][0] == g-> grid [1][1] && g -> grid [1][1] == g -> grid [2][2] && g -> grid[0][0]==X) return X;
   if (g -> grid [0][0] == g-> grid [1][1] && g -> grid [1][1] == g -> grid [2][2] && g -> grid[0][0]==O) return O;
@@ -137,15 +131,42 @@ void printInvalid(validity v) {
 
 // Display the grid.
 void display(game *g) {
+  printf("=============\n");
+  printf("| %c | %c | %c |\n", show(g->grid[0][0]),show(g->grid[0][1]), show(g->grid[0][2]));
+  printf("=============\n");
+  printf("| %c | %c | %c |\n", show(g->grid[1][0]),show(g->grid[1][1]), show(g->grid[1][2]));
+  printf("=============\n");
+  printf("| %c | %c | %c |\n", show(g->grid[2][0]),show(g->grid[2][1]), show(g->grid[2][2]));
+  printf("=============\n");
 }
 
 // Ask the current player for their move, putting it into the given array.
 // Ask repeatedly until the user types in a valid move.
 void ask(game *g, char text[100]) {
+  for (int i = 1; i>0; i++){
+    printf("Enter next move\n");
+    scanf("%s",text);
+    if ((valid(g, text)) != OK){
+      printInvalid(valid(g,text));
+    }
+    else break;
+  }
 }
 
 // Play the game interactively between two human players who take turns.
 void play(char player) {
+  game game;
+  char input[100];
+  newGame(&game, player);
+  display(&game);
+  while(win(&game)== N && draw(&game)==false){
+    ask(&game, input);
+    move(&game, row(input), col(input));
+    display(&game);
+  }
+
+  if (draw(&game)==true) printf("it's a draw\n");
+  if (win(&game)!=N) printf("%c won!\n", win(&game));
 }
 
 //-----------------------------------------------------------------------------
