@@ -45,12 +45,16 @@ void append(char t[], const char s[]) {
 
 // Find the (first) position of s in t, or return -1 (like strstr).
 int find(const char t[], const char s[]) {
-  for (int i=0; t[i]!= '\0'; i++){
-    for (int j=0; s[j]!= '\0'; j++){
-      if (s[j] == t[i]) return i;
+    int i, n = length(t), m = length(s);
+    bool found = false;
+    for (i = 0; i <= n - m && ! found; i++) {
+        found = true;
+        for (int j = 0; j < m && found; j++) {
+            if (t[i+j] != s[j]) found = false;
+        }
     }
-  }
-    return -1;
+    if (! found) i = 0;
+    return i - 1;
 }
 
 // -----------------------------------------------------------------------------
