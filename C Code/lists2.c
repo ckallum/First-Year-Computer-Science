@@ -42,7 +42,7 @@ void freeList(list *l){
     free (l->currentNode);
     l->currentNode = x;
   }
-  free(x);
+  // free(x);
   free(l->first);
   free(l);
 }
@@ -50,8 +50,7 @@ void freeList(list *l){
 // Set the current position before the first item or after the last item,
 // to begin a forward or backward traversal.
 void startF(list *l){
-  l->currentNode = l->first;
-  l->first = l->currentNode;
+  l->currentNode = l->first->next;
 }
 
 void startB(list *l){
@@ -61,20 +60,14 @@ void startB(list *l){
 // Check whether the current position is at the end or start, to test
 // whether a traversal has finished.
 bool endF(list *l){
-  bool fFinish;
-  if (l->currentNode == l->last){
-    fFinish = true;
-  }
-  else fFinish = false;
+  bool fFinish = false;
+  if (l->currentNode == l->last) return !fFinish;
   return fFinish;
 }
 
 bool endB(list *l){
-  bool bFinish;
-  if (l->currentNode == l->first){
-    bFinish = true;
-  }
-  else bFinish = false;
+  bool bFinish=false;
+  if (l->currentNode == l->first) return !bFinish;
   return bFinish;
 }
 
@@ -100,20 +93,38 @@ bool nextB(list *l){
 // Insert an item before the current position during a traversal.  The traversal
 // of the remaining items is not affected.
 void insertF(list *l, item x){
-  if(endB(l) == false){
-    node *newNode = malloc(sizeof(node));
-    newNode->nodeVal = x;
+  node *newNode = malloc(sizeof(node));
+  newNode->nodeVal = x;
+  if (l->currentNode == l->first){
+    newNode->before = l->first;
+    newNode->next = l->first->next;
+    l->first->next->before = newNode;
+    l->first->next = newNode;
+  }
+  else{
     newNode->before = l->currentNode->before;
     l->currentNode->before = newNode;
     newNode->next = l->currentNode;
     newNode->before->next = newNode;
   }
+  // node *current = l->currentNode;
+  // node *prevBefore = current->before;
+  // newNode->before = prevBefore;
+  // newNode->next = current;
+  // prevBefore->next=newNode;
+  // current->before = newNode;
 }
 
 void insertB(list *l, item x){
-  if (endF(l) == false){
-    node *newNode = malloc(sizeof(node));
-    newNode->nodeVal = x;
+  node *newNode = malloc(sizeof(node));
+  newNode->nodeVal = x;
+  if (l->currentNode == l->last){
+    newNode->next = l->last;
+    newNode->before = l->last->before;
+    l->last->before->next = newNode;
+    l->last->before = newNode;
+  }
+  else {
     newNode->next = l->currentNode->next;
     l->currentNode->next = newNode;
     newNode->before = l->currentNode;
@@ -124,12 +135,12 @@ void insertB(list *l, item x){
 // Get the current item. If getF is called when at the end, or getB is called
 // when at the start, the default item is returned.
 item getF(list *l){
-  if ((endF(l)||endB(l)) == false) return l->currentNode->nodeVal;
-  else return l->defaultI;
+  if ((endF(l)||endB(l)) == true) return l->defaultI;
+  else return l->currentNode->nodeVal;
 }
 item getB(list *l){
-  if ((endB(l)||endF(l)) == false) return l->currentNode->nodeVal;
-  else return l->defaultI;
+  if ((endF(l)||endB(l)) == true) return l->defaultI;
+  else return l->currentNode->nodeVal;
 }
 
 // Set the current item and return true. If setF is called when at the end, or
@@ -299,7 +310,7 @@ static void testGet() {
     assert(check("getB", "|", "|", 0, -1, true));
     assert(check("getB", "|37", "|37", 0, -1, true));
     assert(check("getB", "3|7", "3|7", 0, 3, true));
-    assert(check("getB", "37|", "37|", 0, 7, true));
+    assert(check("getB", "p|", "37|", 0, 7, true));
 }
 
 // Test setF and setB. Check's second argument is the expected result.

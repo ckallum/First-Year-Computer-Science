@@ -16,7 +16,6 @@ struct list{
   node *first;
   node *last;
   node *currentNode;
-  item defaultI;
 };
 
 struct node{
@@ -26,62 +25,106 @@ struct node{
 };
 
 list *newList(item d){
-  return 0;
+  list *new = malloc(sizeof(list));
+  node *sentinel = malloc(sizeof(node));
+  node *nodes = malloc(sizeof(node));
+  *nodes = (node) {sentinel, sentinel, 0};
+  *sentinel = (node) {new->last, nodes, -1};
+  *new = (list) {sentinel, sentinel ,nodes};
+  return new;
 }
 
 // Free up the list and all the data in it.
 void freeList(list *l){
+  l->currentNode = l->last;
+  node *x = malloc(sizeof(node));
+  while ((l->currentNode)!=l->first){
+    x = l->currentNode->before;
+    free (l->currentNode);
+    l->currentNode = x;
+  }
+  free(x);
+  free(l->first);
+  free(l);
 
 }
 
 // Set the current position before the first item or after the last item,
 // to begin a forward or backward traversal.
 void startF(list *l){
+  l->currentNode = l->first;
 }
 
 void startB(list *l){
+  l->currentNode = l->last;
 }
 
 // Check whether the current position is at the end or start, to test
 // whether a traversal has finished.
 bool endF(list *l){
-  return false;
+  bool fFinish = false;
+  if (l->currentNode == l->last) return !fFinish;
+  return fFinish;
 }
 
 bool endB(list *l){
-  return false;
+  bool bFinish=false;
+  if (l->currentNode == l->first) return !bFinish;
+  return bFinish;
 }
 
 // Move the current position one place forwards or backwards, and return true.
 // If nextF is called when at the end of the list, or nextB when at the start,
 // the functions do nothing and return false.
 bool nextF(list *l){
+  if (l->currentNode != l->last){
+    l->currentNode = l->currentNode->next;
+    return true;
+  }
   return false;
 }
 
 bool nextB(list *l){
+  if (l->currentNode != l->first){
+    l->currentNode = l->currentNode->before;
+    return true;
+  }
   return false;
 }
 
 // Insert an item before the current position during a traversal.  The traversal
 // of the remaining items is not affected.
 void insertF(list *l, item x){
-
+  node *new = malloc(sizeof(node));
+  new -> nodeVal = x;
+  node *oCurrent = l->currentNode;
+  node *oBefore = l->currentNode->before;
+  new -> before = oBefore;
+  new -> next = oCurrent;
+  oBefore -> next = new;
+  oCurrent -> before = new;
 }
 
 void insertB(list *l, item x){
-
+  node *oCurrent = l->currentNode;
+  node *oNext = oCurrent->next;
+  node *new = malloc(sizeof(node));
+  new -> nodeVal = x;
+  new -> next = oNext;
+  new -> before = oCurrent;
+  oNext -> before = new;
+  oCurrent -> next = new;
 }
 
 // Get the current item. If getF is called when at the end, or getB is called
 // when at the start, the default item is returned.
 item getF(list *l){
-  if ((endF(l)||endB(l)) == false) return l->currentNode->nodeVal;
-  else return l->defaultI;
+  if ((endF(l)||endB(l)) == true) return l->currentNode->nodeVal;
+  return l->currentNode->nodeVal;
 }
 item getB(list *l){
-  if ((endB(l)||endF(l)) == false) return l->currentNode->nodeVal;
-  else return l->defaultI;
+  if ((endB(l)||endF(l)) == true) return l->currentNode->nodeVal;
+  return l->currentNode->nodeVal;
 }
 
 // Set the current item and return true. If setF is called when at the end, or
@@ -106,19 +149,19 @@ bool setB(list *l, item x){
 // or deleteF should be called to delete or step past each item. If deleteF/B is
 // called at the start/end of the list, nothing is done and false is returned.
 bool deleteF(list *l){
-  if (nextF(l) == true) {
-    return true;
-    free(l->currentNode);
+  if (nextB(l) == false) {
+    return false;
   }
-  else return false;
+  free(l->currentNode);
+  return true;
 }
 
 bool deleteB(list *l){
-  if (nextB(l) == true) {
-    return true;
-    free(l->currentNode);
+  if (nextF(l) == false) {
+    return false;
   }
-  else return false;
+  free(l->currentNode);
+  return true;
 }
 
 // Convert a string description to a list.
