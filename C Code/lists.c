@@ -96,14 +96,13 @@ bool nextB(list *l){
 // of the remaining items is not affected.
 void insertF(list *l, item x){
   node *new = malloc(sizeof(node));
-  new -> nodeVal = x;
   node *oCurrent = l->currentNode;
   node *oBefore = l->currentNode->before;
   new -> before = oBefore;
   new -> next = oCurrent;
   oBefore -> next = new;
   oCurrent -> before = new;
-  l->currentNode = new;
+  l->currentNode->nodeVal = x;
 }
 
 void insertB(list *l, item x){
@@ -115,7 +114,7 @@ void insertB(list *l, item x){
   new -> before = oCurrent;
   oNext -> before = new;
   oCurrent -> next = new;
-  l->currentNode = new;
+  l->currentNode->nodeVal = x;
 }
 
 // Get the current item. If getF is called when at the end, or getB is called
