@@ -4,19 +4,19 @@ MacOS := $(findstring Darwin, $(shell uname -s))
 Windows := $(findstring NT, $(shell uname -s))
 
 # Specify what typing 'make' on its own will compile
-default: StringEvaluation
+default: lists
 
 # For Windows, add the .exe extension
 ifdef Windows
 
 %: %.c
-	clang -std=c11 -Wall -pedantic -g $@.c -o $@.exe
+	clang -Dtest_$@ -std=c11 -Wall -pedantic -g $@.c -o $@.exe
 
 # For Linux/MacOS, include the advanced debugging options
 else
 
 %: %.c
-	clang -std=c11 -Wall -pedantic -g $@.c -o $@ \
+	clang -Dtest_$@ -std=c11 -Wall -pedantic -g $@.c -o $@ \
 	    -fsanitize=undefined -fsanitize=address
 
 endif

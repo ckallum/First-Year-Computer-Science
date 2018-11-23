@@ -16,7 +16,6 @@ struct list{
   node *first;
   node *last;
   node *currentNode;
-  item defaultI;
 };
 
 struct node{
@@ -27,9 +26,9 @@ struct node{
 
 list *newList(item d){
   list *xs = malloc(sizeof(list));
-  node *preNode = malloc(sizeof(node));
-  *xs = (list) {preNode,preNode,preNode,d};
-  *preNode = (node) {xs->last, xs->first, 0};
+  node *sentinel = malloc(sizeof(node));
+  *xs = (list) {sentinel,sentinel,sentinel};
+  *preNode = (node) {xs->last, xs->first, -1};
   return xs;
 }
 
@@ -95,24 +94,24 @@ bool nextB(list *l){
 void insertF(list *l, item x){
   node *newNode = malloc(sizeof(node));
   newNode->nodeVal = x;
-  if (l->currentNode == l->first){
-    newNode->before = l->first;
-    newNode->next = l->first->next;
-    l->first->next->before = newNode;
-    l->first->next = newNode;
-  }
-  else{
-    newNode->before = l->currentNode->before;
-    l->currentNode->before = newNode;
-    newNode->next = l->currentNode;
-    newNode->before->next = newNode;
-  }
-  // node *current = l->currentNode;
-  // node *prevBefore = current->before;
-  // newNode->before = prevBefore;
-  // newNode->next = current;
-  // prevBefore->next=newNode;
-  // current->before = newNode;
+  // if (l->currentNode == l->first){
+  //   newNode->before = l->first;
+  //   newNode->next = l->first->next;
+  //   l->first->next->before = newNode;
+  //   l->first->next = newNode;
+  // }
+  // else{
+  //   newNode->before = l->currentNode->before;
+  //   l->currentNode->before = newNode;
+  //   newNode->next = l->currentNode;
+  //   newNode->before->next = newNode;
+  // }
+  node *current = l->currentNode;
+  node *prevBefore = current->before;
+  newNode->before = prevBefore;
+  newNode->next = current;
+  prevBefore->next=newNode;
+  current->before = newNode;
 }
 
 void insertB(list *l, item x){
@@ -135,11 +134,11 @@ void insertB(list *l, item x){
 // Get the current item. If getF is called when at the end, or getB is called
 // when at the start, the default item is returned.
 item getF(list *l){
-  if ((endF(l)||endB(l)) == true) return l->defaultI;
+  if ((endF(l)||endB(l)) == true) return l->currentNode->nodeVal;
   else return l->currentNode->nodeVal;
 }
 item getB(list *l){
-  if ((endF(l)||endB(l)) == true) return l->defaultI;
+  if ((endF(l)||endB(l)) == true) return l->currentNode->nodeVal;
   else return l->currentNode->nodeVal;
 }
 

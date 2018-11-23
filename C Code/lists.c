@@ -1,5 +1,5 @@
 // Testing for the lists module. Strings are used to describe lists. The strings
-// "|37", "3|7", "37|" represent a list of two items, with the current position
+// "|37", "37|", "37|" represent a list of two items, with the current position
 // at the start, middle or end.
 #include "lists.h"
 #include <assert.h>
@@ -29,8 +29,8 @@ list *newList(item d){
   node *sentinel = malloc(sizeof(node));
   node *nodes = malloc(sizeof(node));
   *nodes = (node) {sentinel, sentinel, 0};
-  *sentinel = (node) {new->last, nodes, -1};
   *new = (list) {sentinel, sentinel ,nodes};
+  *sentinel = (node) {new->last, nodes, -1};
   return new;
 }
 
@@ -103,6 +103,7 @@ void insertF(list *l, item x){
   new -> next = oCurrent;
   oBefore -> next = new;
   oCurrent -> before = new;
+  l->currentNode = new;
 }
 
 void insertB(list *l, item x){
@@ -114,6 +115,7 @@ void insertB(list *l, item x){
   new -> before = oCurrent;
   oNext -> before = new;
   oCurrent -> next = new;
+  l->currentNode = new;
 }
 
 // Get the current item. If getF is called when at the end, or getB is called
