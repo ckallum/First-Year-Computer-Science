@@ -1,5 +1,5 @@
 // Testing for the lists module. Strings are used to describe lists. The strings
-// "|37", "37|", "37|" represent a list of two items, with the current position
+// "|37", "3|7", "37|" represent a list of two items, with the current position
 // at the start, middle or end.
 #include "lists.h"
 #include <assert.h>
@@ -13,8 +13,7 @@
 struct node;
 typedef struct node node;
 struct list{
-  node *first;
-  node *last;
+  node *sentinel;
   node *currentNode;
 };
 
@@ -26,25 +25,24 @@ struct node{
 
 list *newList(item d){
   list *new = malloc(sizeof(list));
-  node *sentinel = malloc(sizeof(node));
   node *nodes = malloc(sizeof(node));
-  *nodes = (node) {sentinel, sentinel, 0};
-  *new = (list) {sentinel, sentinel ,nodes};
-  *sentinel = (node) {new->last, nodes, -1};
+  new -> sentinel -> nodeVal = d;
+  *nodes = (node) {new->sentinel, new->sentinel, 0};
+  *new = (list) {new->sentinel, nodes};
   return new;
 }
 
 // Free up the list and all the data in it.
 void freeList(list *l){
-  l->currentNode = l->last;
+  l->currentNode = l->currentNode->next;
   node *x = malloc(sizeof(node));
-  while ((l->currentNode)!=l->first){
-    x = l->currentNode->before;
+  while ((l->currentNode)!=l->sentinel){
+    x = l->currentNode->next;
     free (l->currentNode);
     l->currentNode = x;
   }
   free(x);
-  free(l->first);
+  free(l->currentNode);
   free(l);
 
 }
@@ -52,24 +50,24 @@ void freeList(list *l){
 // Set the current position before the first item or after the last item,
 // to begin a forward or backward traversal.
 void startF(list *l){
-  l->currentNode = l->first;
+  l->currentNode = l->sentinel;
 }
 
 void startB(list *l){
-  l->currentNode = l->last;
+  l->currentNode = l->sentinel;
 }
 
 // Check whether the current position is at the end or start, to test
 // whether a traversal has finished.
 bool endF(list *l){
   bool fFinish = false;
-  if (l->currentNode == l->last) return !fFinish;
+  if (l->currentNode == l->sentinel) return !fFinish;
   return fFinish;
 }
 
 bool endB(list *l){
   bool bFinish=false;
-  if (l->currentNode == l->first) return !bFinish;
+  if (l->currentNode == l->sentinel) return !bFinish;
   return bFinish;
 }
 
@@ -77,7 +75,7 @@ bool endB(list *l){
 // If nextF is called when at the end of the list, or nextB when at the start,
 // the functions do nothing and return false.
 bool nextF(list *l){
-  if (l->currentNode != l->last){
+  if (l->currentNode != l->sentinel){
     l->currentNode = l->currentNode->next;
     return true;
   }
@@ -85,7 +83,7 @@ bool nextF(list *l){
 }
 
 bool nextB(list *l){
-  if (l->currentNode != l->first){
+  if (l->currentNode != l->sentinel){
     l->currentNode = l->currentNode->before;
     return true;
   }
@@ -96,25 +94,33 @@ bool nextB(list *l){
 // of the remaining items is not affected.
 void insertF(list *l, item x){
   node *new = malloc(sizeof(node));
-  node *oCurrent = l->currentNode;
-  node *oBefore = l->currentNode->before;
-  new -> before = oBefore;
-  new -> next = oCurrent;
-  oBefore -> next = new;
-  oCurrent -> before = new;
-  l->currentNode->nodeVal = x;
+  node *prevNode = l->currentNode->before;
+  new -> nodeVal = x;
+  new -> next = l->currentNode;
+  new -> before = prevNode;
+  l -> currentNode->before = new;
+  prevNode->next = new;
+  // node *oCurrent = l->currentNode;
+  // node *oBefore = l->currentNode->before;
+  // new -> nodeVal = x;
+  // new -> before = oBefore;
+  // new -> next = oCurrent;
+  // oBefore -> next = new;
+  // oCurrent -> before = new;
 }
 
 void insertB(list *l, item x){
-  node *oCurrent = l->currentNode;
-  node *oNext = oCurrent->next;
-  node *new = malloc(sizeof(node));
-  new -> nodeVal = x;
-  new -> next = oNext;
-  new -> before = oCurrent;
-  oNext -> before = new;
-  oCurrent -> next = new;
-  l->currentNode->nodeVal = x;
+
+  l->currentNode = l->currentNode->next;
+  insertF(l, x);
+  // node *oCurrent = l->currentNode;
+  // node *oNext = oCurrent->next;
+  // node *new = malloc(sizeof(node));
+  // new -> nodeVal = x;
+  // new -> next = oNext;
+  // new -> before = oCurrent;
+  // oNext -> before = new;
+  // oCurrent -> next = new;
 }
 
 // Get the current item. If getF is called when at the end, or getB is called
@@ -125,7 +131,7 @@ item getF(list *l){
 }
 item getB(list *l){
   if ((endB(l)||endF(l)) == true) return l->currentNode->nodeVal;
-  return l->currentNode->nodeVal;
+  return l->currentNode->before->nodeVal;
 }
 
 // Set the current item and return true. If setF is called when at the end, or
