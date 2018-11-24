@@ -13,8 +13,10 @@
 struct node;
 typedef struct node node;
 struct list{
-  node *sentinel;
+  node *first;
+  node *last;
   node *currentNode;
+  item dFault;
 };
 
 struct node{
@@ -26,48 +28,45 @@ struct node{
 list *newList(item d){
   list *new = malloc(sizeof(list));
   node *nodes = malloc(sizeof(node));
-  new -> sentinel -> nodeVal = d;
-  *nodes = (node) {new->sentinel, new->sentinel, 0};
-  *new = (list) {new->sentinel, nodes};
+  node *endNode = malloc(sizeof(node));
+  *new = (list) {nodes,endNode,nodes,d};
   return new;
 }
 
 // Free up the list and all the data in it.
 void freeList(list *l){
-  l->currentNode = l->currentNode->next;
   node *x = malloc(sizeof(node));
-  while ((l->currentNode)!=l->sentinel){
-    x = l->currentNode->next;
-    free (l->currentNode);
+  l->currentNode = l->last;
+  while (l->currentNode->before != NULL){
+    x = l->currentNode->before;
+    free(l->currentNode);
     l->currentNode = x;
   }
-  free(x);
   free(l->currentNode);
   free(l);
-
 }
 
 // Set the current position before the first item or after the last item,
 // to begin a forward or backward traversal.
 void startF(list *l){
-  l->currentNode = l->sentinel;
+  l->currentNode = l->first;
 }
 
 void startB(list *l){
-  l->currentNode = l->sentinel;
+  l->currentNode = l->last;
 }
 
 // Check whether the current position is at the end or start, to test
 // whether a traversal has finished.
 bool endF(list *l){
   bool fFinish = false;
-  if (l->currentNode == l->sentinel) return !fFinish;
+  if (l->currentNode == l->last) return !fFinish;
   return fFinish;
 }
 
 bool endB(list *l){
   bool bFinish=false;
-  if (l->currentNode == l->sentinel) return !bFinish;
+  if (l->currentNode == l->first) return !bFinish;
   return bFinish;
 }
 
@@ -75,7 +74,7 @@ bool endB(list *l){
 // If nextF is called when at the end of the list, or nextB when at the start,
 // the functions do nothing and return false.
 bool nextF(list *l){
-  if (l->currentNode != l->sentinel){
+  if (l->currentNode != l->last){
     l->currentNode = l->currentNode->next;
     return true;
   }
@@ -83,7 +82,7 @@ bool nextF(list *l){
 }
 
 bool nextB(list *l){
-  if (l->currentNode != l->sentinel){
+  if (l->currentNode != l->first){
     l->currentNode = l->currentNode->before;
     return true;
   }
@@ -99,7 +98,9 @@ void insertF(list *l, item x){
   new -> next = l->currentNode;
   new -> before = prevNode;
   l -> currentNode->before = new;
-  prevNode->next = new;
+  if(new->before != NULL){
+      prevNode->next = new;
+  }
   // node *oCurrent = l->currentNode;
   // node *oBefore = l->currentNode->before;
   // new -> nodeVal = x;
@@ -110,7 +111,6 @@ void insertF(list *l, item x){
 }
 
 void insertB(list *l, item x){
-
   l->currentNode = l->currentNode->next;
   insertF(l, x);
   // node *oCurrent = l->currentNode;
