@@ -42,6 +42,7 @@ void freeList(list *l){
     free(l->currentNode);
     l->currentNode = x;
   }
+  free(x);
   free(l->currentNode);
   free(l);
 }
