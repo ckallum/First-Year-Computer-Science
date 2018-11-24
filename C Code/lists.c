@@ -35,13 +35,12 @@ list *newList(item d){
 
 // Free up the list and all the data in it.
 void freeList(list *l){
-  node *x = malloc(sizeof(node));
-  x = l->currentNode;
-  while (x->before != l->sentinel){
-    x = x->before;
-    free(x->next);
+  l->currentNode = l->sentinel->before;
+  while (l->currentNode->before != l->sentinel){
+    l->currentNode = l->currentNode->before;
+    free(l->currentNode->next);
   }
-  free(x);
+  free(l->sentinel);
   free(l);
 }
 
@@ -94,18 +93,19 @@ void insertF(list *l, item x){
   new -> nodeVal = x;
   new -> next = l->currentNode;
   new -> before = prevNode;
-  l -> currentNode->before = new;
+  l->currentNode->before = new;
   prevNode->next = new;
 }
 
 void insertB(list *l, item x){
   node *new = malloc(sizeof(node));
   node *nextNode = l->currentNode->next;
-  new -> nodeVal = x;
-  new -> next = nextNode;
-  new -> before = l->currentNode;
-  l -> currentNode->next = new;
+  new ->nodeVal = l->currentNode->nodeVal;
+  l->currentNode->nodeVal = x;
+  new->next = nextNode;
+  new->before= l->currentNode;
   nextNode->before = new;
+  l->currentNode->next = new;
 }
 
 // Get the current item. If getF is called when at the end, or getB is called
@@ -138,9 +138,11 @@ bool setB(list *l, item x){
 // or deleteF should be called to delete or step past each item. If deleteF/B is
 // called at the start/end of the list, nothing is done and false is returned.
 bool deleteF(list *l){
-  if (l->sentinel->next == l->sentinel) return false;
-  l->currentNode = l->currentNode->next;
-  free(l->currentNode->before);
+  // if (l->currentNode->next == l->currentNode->before) return false;
+  // node *nextNode = l->currentNode->next;
+  // free(l->currentNode);
+  // prevNode->next = nextNode;
+  // nextNode->before = prevNode;
   return true;
 }
 
@@ -263,10 +265,10 @@ static void testInsert() {
     assert(check("insertF", "|37", "5|37", 5, 0, true));
     assert(check("insertF", "3|7", "35|7", 5, 0, true));
     assert(check("insertF", "37|", "375|", 5, 0, true));
-    // assert(check("insertB", "|", "|5", 5, 0, true));
-    // assert(check("insertB", "|37", "|537", 5, 0, true));
-    // assert(check("insertB", "3|7", "3|57", 5, 0, true));
-    // assert(check("insertB", "37|", "37|5", 5, 0, true));
+    assert(check("insertB", "|", "|5", 5, 0, true));
+    assert(check("insertB", "|37", "|537", 5, 0, true));
+    assert(check("insertB", "3|7", "3|57", 5, 0, true));
+    assert(check("insertB", "37|", "37|5", 5, 0, true));
 }
 
 // Test that getF and getB return the current item.
@@ -313,7 +315,7 @@ int main() {
     testInsert();
     testGet();
     testSet();
-    testDelete();
+     testDelete();
     printf("Lists module OK\n");
     return 0;
 }
