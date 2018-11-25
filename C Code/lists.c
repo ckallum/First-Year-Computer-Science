@@ -40,6 +40,7 @@ void freeList(list *l){
     l->currentNode = l->currentNode->before;
     free(l->currentNode->next);
   }
+  free(l->currentNode);
   free(l->sentinel);
   free(l);
 }
