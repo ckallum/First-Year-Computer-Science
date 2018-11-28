@@ -77,7 +77,10 @@ minNode buildTree(heapArr *arr){
   return findMin (heap);
 }
 
-
+minNode findMin(minHeap *h){
+  minNode *t = &h->array[0];
+  return *t;
+}
 void insertNode(minHeap *h, minNode *n){
 
 }
@@ -88,7 +91,7 @@ void insertNode(minHeap *h, minNode *n){
 
 //FREE SECTION
 void freeHeap(minHeap *h){
-
+  free(h);
 }
 
 void freeHeapArr(heapArr *arr){
@@ -160,6 +163,10 @@ heapArr *initialiseInput(int arrLen){
 
 //MAIN INITIALISER
 void HuffmanCodes(heapArr *arr){
+    // // minNode *root = buildTree(arr);
+    // int array[100], top =0;
+    //
+    // printCodes(root, arr, top);
 
 }
 
@@ -177,5 +184,6 @@ int main()
   sscanf(line, "%d", &size);
   heapArr *arr =initialiseInput(size);
   HuffmanCodes(arr);
+  freeHeap(arr);
   return 0;
 }
