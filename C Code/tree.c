@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include<ctype.h>
 #include"tree.h"
-#define treeHeight = 100;
+#define treeHeight 100
 
 //STRUCT SECTION
 
@@ -82,8 +82,51 @@ huffNode *findMin(nodeLists *l1, nodeLists *l2){
 }
 
 
-int nodeLeaf(huffNode *n){
-  return !(n->left) && !(n->right);
+huffNode *huffTree(huffData *array){
+  huffNode *left;
+  huffNode *right;
+  huffNode *top;
+
+  nodeLists *initL = newList(array->size);
+  nodeLists *secondL = newList(array->size);
+
+  for (int i=0 ;i< array->size;i++){
+    add2List(initL, newNode(array->data[i],array->frequencies[i]));
+  }
+  while (!((initL->front = -1)&&(secondL->front !=-1 && secondL->front == secondL->back))){
+    left = findMin(initL,secondL);
+    right = findMin(initL,secondL);
+    top = newNode('$', (left->freq + right->freq));
+    top->left = left;
+    top->right = right;
+    add2List(secondL, top);
+  }
+  return subFromList(secondL);
+}
+
+void printCodes(int codeArray[], int parent, huffNode *base){
+  if (base->left){
+    codeArray[parent] = 0;
+    printCodes(codeArray, parent+1, base->left);
+  }
+  if (base->right){
+    codeArray[parent] = 1;
+    printCodes(codeArray, parent+1, base->right);
+  }
+  if (!(base->right) && !(base->left)){
+    printf("%c:",base->data);
+    for (int i = 0; i<parent;i++){
+        printf("%d",codeArray[i]);
+    }
+    printf("\n");
+  }
+}
+
+void HuffmanCodes(huffData *array){
+  int parent = 0;
+  int cArray[treeHeight];
+  huffNode *base = huffTree(array);
+  printCodes(cArray, parent,base);
 }
 
 
@@ -152,8 +195,7 @@ int main()
   printf( "How many characters do you want to encode?: \n");
   fgets(line,sizeof(line), stdin);
   sscanf(line, "%d", &size);
-  huffData *arr =initialiseInput(size);
-  free(arr);
-  // HuffmanCodes(arr);
+  huffData *arr = initialiseInput(size);
+  HuffmanCodes(arr);
   return 0;
 }

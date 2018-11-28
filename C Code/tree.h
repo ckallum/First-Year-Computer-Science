@@ -11,6 +11,7 @@ typedef struct nodeLists nodeLists;
 
 huffData *newHeapArr(int capacity, char chars[], int freqs[]);
 huffNode *newNode(char data, char freq);
+nodeLists *newList(int capacity);
 
 void add2List(nodeLists *l, huffNode *n);
 huffNode *subFromList(nodeLists *l);
@@ -18,7 +19,7 @@ huffNode *subFromList(nodeLists *l);
 huffNode *findMin(nodeLists *l1, nodeLists *l2);
 
 
-void HuffmanCodes(huffData *arr);
+void HuffmanCodes(huffData *array);
 
 
 
