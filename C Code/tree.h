@@ -17,8 +17,9 @@ void add2List(nodeLists *l, huffNode *n);
 huffNode *subFromList(nodeLists *l);
 
 huffNode *findMin(nodeLists *l1, nodeLists *l2);
-
-
+int nodeLeaf(huffNode *n);
+huffNode *huffTree(huffData *array)
+void printCodes(int codeArray[], int parent, huffNode *base);
 void HuffmanCodes(huffData *array);
 
 
