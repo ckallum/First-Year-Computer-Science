@@ -11,35 +11,30 @@ typedef struct minHeap minHeap;
 
 
 minNode *newNode(char data, int freq);
-
 heapArr *newHeapArr(int capacity, char chars[], int freqs[]);
-
-void initialiseInput();
+minHeap *newHeap(int capacity);
+minNode *huffmanTree(minNode *n, heapArr *arr);
 
 void freeHeap(minHeap *h);
-
 void freeHeapArr(heapArr *arr);
+void freeNode(minNode *n);
 
 void sortHeap(minHeap *h, int index);
-
 void swapNode(minNode**a, minNode**b);
 
-minNode findMin(minHeap *h);
 
+minNode buildTree(heapArr *arr);
 void insertNode(minHeap *h,minNode *n);
+minNode findMin(minHeap *h);
 
 void expandHeap(minHeap *h);
 
 int isLeaf(minNode *root);
 
-minHeap* createHeap(heapArr *arr);
-
-minNode *huffmanTree(heapArr *arr);
-
-void printCodes(minNode *root, heapArr *arr, int top);
 
 void HuffmanCodes(heapArr *arr);
+void printCodes(minNode *root, int arr[], int top);
 
-
+heapArr *initialiseInput(int arrLen);
 int testGetFreq(int input, int freqs[], int index);
 int testGetData(char input);
