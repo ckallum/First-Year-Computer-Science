@@ -2,107 +2,89 @@
 #include<stdlib.h>
 #include<ctype.h>
 #include"tree.h"
+#define treeHeight = 100;
 
 //STRUCT SECTION
-struct heapArr{
+
+struct huffData{
+  int size;
   char *data;
-  int *freq;
-  int capacity;
+  int *frequencies;
 };
 
-struct minNode{
+struct huffNode{
+  huffNode *left;
+  huffNode *right;
   char data;
   int freq;
-  minNode *left;
-  minNode *right;
 };
 
-struct minHeap{
-  int size;
+struct nodeLists{
+  int front;
+  int back;
   int capacity;
-  minNode *array;
+  huffNode **array;
 };
 
-
-
-//INITIALISE STRUCTURES;;
-heapArr *newHeapArr(int capacity, char chars[], int freqs[]){
-  heapArr *arr = malloc(sizeof(heapArr));
+huffData *newHeapArr(int capacity, char chars[], int freqs[]){
+  huffData *arr = malloc(sizeof(huffData));
   arr->data = chars;
-  arr->freq = freqs;
-  arr->capacity = capacity;
+  arr->frequencies = freqs;
+  arr->size = capacity;
   return arr;
 }
 
-minNode *newNode(char data, int freq){
-  minNode *tempNode = malloc(sizeof(minNode));
-  tempNode->left = tempNode->right = NULL;
-  tempNode->freq = freq;
-  tempNode->data = data;
-  return tempNode;
+huffNode *newNode(char data, char freq){
+  huffNode *temp = malloc(sizeof(huffNode));
+  temp->left = temp->right = NULL;
+  temp->data = data;
+  temp->freq = freq;
+  return temp;
 }
 
-minHeap *newHeap(int capacity){
-  minHeap *h = malloc(sizeof(minHeap));
-  h->size = 0;
-  h->capacity = capacity;
-  h->array = malloc(h->capacity * sizeof(minNode));
-  return h;
+nodeLists *newList(int capacity){
+  nodeLists *list = malloc(sizeof(nodeLists));
+  list->front = -1;
+  list->back = -1;
+  list->capacity = capacity;
+  list->array = malloc(list->capacity * sizeof(huffNode));
+  return list;
 }
 
+void add2List(nodeLists *l, huffNode *n){
+  if(l->back == l->capacity-1)return;
+  l->array[(l->back)+1] = n;
+  if (l->front == -1) l->front = l->front+1;
+}
 
-//CREATE TREE
-minHeap *CreateMinHeap(heapArr *arr){
-  minHeap *h = newHeap(arr->capacity);
-  for (int i = 0; i < h->capacity; i++){
-    h->array[i] = *newNode(arr->data[i], arr->freq[i]);
+huffNode *subFromList(nodeLists *l){
+  if(l->front==-1)return NULL;
+  huffNode *temp = l->array[l->front];
+  if(l->front == l->back){
+    l->front = l->back = -1;
   }
-  return h;
+  else
+  l->front = l->front +1;
+  return temp;
 }
 
-minNode buildTree(heapArr *arr){
-  minNode *left;
-  minNode *right;
-  minNode *top;
-
-  minHeap *heap = CreateMinHeap(arr);
-  while(heap->size != 1){
-    *left = findMin(heap);
-    *right = findMin(heap);
-    top = newNode('s', left->freq + right->freq);
-    top->left = left;
-    top->right = right;
-    insertNode(heap, top);
+huffNode *findMin(nodeLists *l1, nodeLists *l2){
+  if(l1->front ==-1){
+    return(subFromList(l2));
   }
-  return findMin (heap);
-}
-
-minNode findMin(minHeap *h){
-  minNode *t = &h->array[0];
-  return *t;
-}
-void insertNode(minHeap *h, minNode *n){
-
-}
-
-
-
-
-
-//FREE SECTION
-void freeHeap(minHeap *h){
-  free(h);
-}
-
-void freeHeapArr(heapArr *arr){
-
-}
-
-void freeNode(minNode *n){
-
+  if(l2->front == -1){
+    return(subFromList(l1));
+  }
+  if(((l1->front != -1)&& (l2->front != -1)) && (l1->array[l1->front]->freq < l2->array[l2->front]->freq)){
+    return subFromList(l1);
+  }
+  return subFromList(l2);
 }
 
 
+int nodeLeaf(huffNode *n){
+  return !(n->left) && !(n->right);
+}
 
 
 //IO
@@ -152,27 +134,15 @@ int testGetFreq(int input, int freqs[], int index){
   return 1;
 }
 
-heapArr *initialiseInput(int arrLen){
+huffData *initialiseInput(int arrLen){
   int freqs[arrLen];
   char chars[arrLen+1];
-  heapArr *arr = newHeapArr(arrLen,getHeapData(arrLen,chars), getHeapFreq(arrLen, freqs));
-  printf("CharArray: %s, Number of Chars: %d\n", arr->data,arr->capacity);
+  huffData *arr = newHeapArr(arrLen,getHeapData(arrLen,chars), getHeapFreq(arrLen, freqs));
+  printf("CharArray: %s, Number of Chars: %d\n", arr->data,arr->size);
   return arr;
 }
 
 
-//MAIN INITIALISER
-void HuffmanCodes(heapArr *arr){
-    // // minNode *root = buildTree(arr);
-    // int array[100], top =0;
-    //
-    // printCodes(root, arr, top);
-
-}
-
-void printCodes(minNode *root, int arr[], int top){
-
-}
 
 //DRIVER
 int main()
@@ -182,8 +152,8 @@ int main()
   printf( "How many characters do you want to encode?: \n");
   fgets(line,sizeof(line), stdin);
   sscanf(line, "%d", &size);
-  heapArr *arr =initialiseInput(size);
-  HuffmanCodes(arr);
-  freeHeap(arr);
+  huffData *arr =initialiseInput(size);
+  free(arr);
+  // HuffmanCodes(arr);
   return 0;
 }
