@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<ctype.h>
-#include"tree.h"
+#include "tree.h"
 #define treeHeight 100
 
 //STRUCT SECTION
@@ -16,7 +16,7 @@ struct huffNode{
   huffNode *left;
   huffNode *right;
   char data;
-  unsigned int freq;
+  unsigned freq;
 };
 
 struct nodeLists{
@@ -34,7 +34,7 @@ huffData *newHeapArr(int capacity, char chars[], int freqs[]){
   return arr;
 }
 
-huffNode *newNode(char data, int freq){
+huffNode *newNode(char data, unsigned freq){
   huffNode *temp = malloc(sizeof(huffNode));
   temp->left = temp->right = NULL;
   temp->data = data;
@@ -47,7 +47,7 @@ nodeLists *newList(int capacity){
   list->front = -1;
   list->back = -1;
   list->capacity = capacity;
-  list->array = malloc(list->capacity * sizeof(huffNode*));
+  list->array = malloc(list->capacity * sizeof(huffNode));
   return list;
 }
 
@@ -93,21 +93,21 @@ huffNode *huffTree(huffData *array){
   huffNode *right;
   huffNode *top;
 
-  nodeLists *initL = newList(array->size);
-  nodeLists *secondL = newList(array->size);
+  nodeLists *l1 = newList(array->size);
+  nodeLists *l2 = newList(array->size);
 
   for (int i=0 ;i< array->size;i++){
-    add2List(initL, newNode(array->data[i],array->frequencies[i]));
+    add2List(l1, newNode(array->data[i],array->frequencies[i]));
   }
-  while (!((initL->front = -1)&&(secondL->front !=-1 && secondL->front == secondL->back))){
-    left = findMin(initL,secondL);
-    right = findMin(initL,secondL);
+  while (!((l1->front = -1)&&(l2->front !=-1 && l2->front == l2->back))){
+    left = findMin(l1,l2);
+    right = findMin(l1,l2);
     top = newNode('$', (left->freq + right->freq));
     top->left = left;
     top->right = right;
-    add2List(secondL, top);
+    add2List(l2, top);
   }
-  return subFromList(secondL);
+  return subFromList(l2);
 }
 
 void printCodes(int codeArray[], int parent, huffNode *base){
@@ -188,6 +188,9 @@ huffData *initialiseInput(int arrLen){
   char chars[arrLen+1];
   huffData *arr = newHeapArr(arrLen,getHeapData(arrLen,chars), getHeapFreq(arrLen, freqs));
   printf("CharArray: %s, Number of Chars: %d\n", arr->data,arr->size);
+  for (int i = 0; i < arrLen; i++){
+    printf("Frequency of %c: %d\n", arr->data[i], arr->frequencies[i]);
+  }
   return arr;
 }
 

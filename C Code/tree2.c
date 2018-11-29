@@ -1,4 +1,6 @@
 // C Program for Efficient Huffman Coding for Sorted input
+
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -45,7 +47,7 @@ struct Queue* createQueue(int capacity)
 
 // A utility function to check if size of given queue is 1
 int isSizeOne(struct Queue* queue)
-{ 
+{
     return queue->front == queue->rear && queue->front != -1;
 }
 
