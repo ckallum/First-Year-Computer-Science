@@ -10,7 +10,7 @@ struct nodeLists;
 typedef struct nodeLists nodeLists;
 
 huffData *newHeapArr(int capacity, char chars[], int freqs[]);
-huffNode *newNode(char data, char freq);
+huffNode *newNode(char data, int freq);
 nodeLists *newList(int capacity);
 
 void add2List(nodeLists *l, huffNode *n);
@@ -18,13 +18,9 @@ huffNode *subFromList(nodeLists *l);
 
 huffNode *findMin(nodeLists *l1, nodeLists *l2);
 int nodeLeaf(huffNode *n);
-huffNode *huffTree(huffData *array)
+huffNode *huffTree(huffData *array);
 void printCodes(int codeArray[], int parent, huffNode *base);
 void HuffmanCodes(huffData *array);
-
-
-
-
 
 
 int *getHeapFreq(const int arrLen, int freqs[]);

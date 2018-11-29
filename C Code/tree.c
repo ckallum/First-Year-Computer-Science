@@ -16,7 +16,7 @@ struct huffNode{
   huffNode *left;
   huffNode *right;
   char data;
-  int freq;
+  unsigned int freq;
 };
 
 struct nodeLists{
@@ -34,7 +34,7 @@ huffData *newHeapArr(int capacity, char chars[], int freqs[]){
   return arr;
 }
 
-huffNode *newNode(char data, char freq){
+huffNode *newNode(char data, int freq){
   huffNode *temp = malloc(sizeof(huffNode));
   temp->left = temp->right = NULL;
   temp->data = data;
@@ -47,7 +47,7 @@ nodeLists *newList(int capacity){
   list->front = -1;
   list->back = -1;
   list->capacity = capacity;
-  list->array = malloc(list->capacity * sizeof(huffNode));
+  list->array = malloc(list->capacity * sizeof(huffNode*));
   return list;
 }
 
@@ -59,14 +59,20 @@ void add2List(nodeLists *l, huffNode *n){
 
 huffNode *subFromList(nodeLists *l){
   if(l->front==-1)return NULL;
-  huffNode *temp = l->array[l->front];
+  huffNode *t = l->array[l->front];
   if(l->front == l->back){
     l->front = l->back = -1;
   }
-  else
-  l->front = l->front +1;
-  return temp;
+  else l->front = l->front +1;
+  return t;
 }
+
+
+huffNode *firstNode(nodeLists* list){
+  if (list->front == -1) return NULL;
+  return list->array[list->front];
+}
+
 
 huffNode *findMin(nodeLists *l1, nodeLists *l2){
   if(l1->front ==-1){
@@ -75,7 +81,7 @@ huffNode *findMin(nodeLists *l1, nodeLists *l2){
   if(l2->front == -1){
     return(subFromList(l1));
   }
-  if(((l1->front != -1)&& (l2->front != -1)) && (l1->array[l1->front]->freq < l2->array[l2->front]->freq)){
+  if(firstNode(l1)->freq < firstNode(l2)->freq){
     return subFromList(l1);
   }
   return subFromList(l2);
