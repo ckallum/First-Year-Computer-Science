@@ -6,11 +6,11 @@
 
 //STRUCT SECTION
 
-// struct huffData{
-//   int size;
-//   char *data;
-//   int *frequencies;
-// };
+struct huffData{
+  int size;
+  char *data;
+  int *frequencies;
+};
 
 struct huffNode{
   huffNode *left;
@@ -26,13 +26,13 @@ struct nodeLists{
   huffNode **array;
 };
 
-// huffData *newHeapArr(int capacity, char chars[], int freqs[]){
-//   huffData *arr = malloc(sizeof(huffData));
-//   arr->data = chars;
-//   arr->frequencies = freqs;
-//   arr->size = capacity;
-//   return arr;
-// }
+huffData *newHeapArr(int capacity, char chars[], int freqs[]){
+  huffData *arr = malloc(sizeof(huffData));
+  arr->data = chars;
+  arr->frequencies = freqs;
+  arr->size = capacity;
+  return arr;
+}
 
 huffNode *newNode(char data, unsigned freq){
   huffNode *temp = malloc(sizeof(huffNode));
@@ -51,10 +51,27 @@ nodeLists *newList(int capacity){
   return list;
 }
 
+void freeData(huffData *array){
+  free(array);
+}
+
+void freeTree(nodeLists *l){
+    while (l->back !=-1){
+      free(l->array[l->back]);
+      l->back = l->back-1;
+    }
+    free(l->array);
+    free(l);
+}
+
+
 void add2List(nodeLists *l, huffNode *n){
   if(l->back == l->capacity-1)return;
-  l->array[(l->back)+1] = n;
-  if (l->front == -1) l->front = l->front+1;
+  l->back = l->back +1;
+  l->array[(l->back)] = n;
+  if (l->front == -1){
+    l->front = l->front+1;
+  }
 }
 
 huffNode *subFromList(nodeLists *l){
@@ -88,18 +105,15 @@ huffNode *findMin(nodeLists *l1, nodeLists *l2){
 }
 
 
-huffNode *huffTree(char data[], int freqs[], int size){
+huffNode *huffTree(nodeLists *l1, nodeLists *l2,char data[], int freqs[], int size){
   huffNode *left;
   huffNode *right;
   huffNode *top;
 
-  nodeLists *l1 = newList(size);
-  nodeLists *l2 = newList(size);
-
   for (int i=0 ;i< size;i++){
     add2List(l1, newNode(data[i],freqs[i]));
   }
-  while (!((l1->front = -1)&&(l2->front !=-1 && l2->front == l2->back))){
+  while (!((l1->front == -1)&&(l2->front !=-1 && l2->front == l2->back))){
     left = findMin(l1,l2);
     right = findMin(l1,l2);
     top = newNode('$', (left->freq + right->freq));
@@ -128,13 +142,21 @@ void printCodes(int codeArray[], int parent, huffNode *base){
   }
 }
 
-void HuffmanCodes(char data[], int freq[], int size){
+void HuffmanCodes(huffData *array){
   int parent = 0;
   int cArray[treeHeight];
-  huffNode *base = huffTree(data, freq, size);
+  nodeLists *l1 = newList(array->size);
+  nodeLists *l2 = newList(array->size);
+  huffNode *base = huffTree(l1, l2,array->data, array->frequencies, array->size);
   printCodes(cArray, parent,base);
+  freeHuffman(l1,l2,array);
 }
 
+void freeHuffman(nodeLists *l1, nodeLists *l2, huffData *array){
+  freeTree(l1);
+  freeTree(l2);
+  freeData(array);
+}
 
 //IO
 //Get's the frequencies of corresponding data to be encoded
@@ -183,16 +205,37 @@ int testGetFreq(int input, int freqs[], int index){
   return 1;
 }
 
-//DRIVER
-int main()
-{
+huffData *initialiseInput(int arrLen){
+  int freqs[arrLen];
+  char chars[arrLen+1];
+  huffData *arr = newHeapArr(arrLen,getHeapData(arrLen,chars), getHeapFreq(arrLen, freqs));
+  printf("CharArray: %s, Number of Chars: %d\n", arr->data,arr->size);
+  for (int i = 0; i < arrLen; i++){
+    printf("Frequency of %c: %d\n", arr->data[i], arr->frequencies[i]);
+  }
+  return arr;
+}
+
+int getSize(){
+  bool valid = false;
   int size;
   char line[100];
-  printf( "How many characters do you want to encode?: \n");
-  fgets(line,sizeof(line), stdin);
-  sscanf(line, "%d", &size);
-  int freqs[size];
-  char chars[size+1];
-  HuffmanCodes(getHeapData(size, chars), getHeapFreq(size,freqs),size);
+  while(valid == false){
+    printf( "How many characters do you want to encode?: \n");
+    fgets(line,sizeof(line), stdin);
+    sscanf(line, "%d", &size);
+    if (isdigit(size)){
+      valid = true;
+    }
+    else printf("Size invalid, try again \n");
+  }
+  return size;
+}
+//DRIVER
+int main(){
+  int size;
+  size = getSize();
+  huffData *arr = initialiseInput(size);
+  HuffmanCodes(arr);
   return 0;
 }
