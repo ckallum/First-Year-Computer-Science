@@ -2,10 +2,9 @@
 #include<stdlib.h>
 #include<ctype.h>
 #include "tree.h"
-#define treeHeight 100
+#define treeHeight 100 //GLOBAL VARIABLE FOR MAXIMUM TREE HEIGHT
 
 //STRUCT SECTION
-
 struct huffData{
   int size;
   char *data;
@@ -26,6 +25,7 @@ struct nodeLists{
   huffNode **array;
 };
 
+//CREATE NEW STRUCTURE FUNCTIONS
 huffData *newHeapArr(int capacity, char chars[], int freqs[]){
   huffData *arr = malloc(sizeof(huffData));
   arr->data = chars;
@@ -47,10 +47,11 @@ nodeLists *newList(int capacity){
   nodeLists *list = malloc(sizeof(nodeLists));
   list->front = list->back = -1;
   list->capacity = capacity;
-  list->array = malloc(list->capacity * sizeof(huffNode*));
+  list->array = malloc(list->capacity * sizeof(huffNode));
   return list;
 }
 
+//FREE FUNCTIONS
 void freeData(huffData *array){
   free(array);
 }
@@ -64,7 +65,15 @@ void freeTree(nodeLists *l){
     free(l);
 }
 
+void freeNode(huffNode *n){
+  if(n != NULL){
+    freeNode(n->left);
+    freeNode(n->right);
+    free(n);
+  }
+}
 
+//INSERTION AND DELETION FUNCTION'S
 void add2List(nodeLists *l, huffNode *n){
   if(l->back == l->capacity-1)return;
   l->back = l->back +1;
@@ -84,13 +93,13 @@ huffNode *subFromList(nodeLists *l){
   return t;
 }
 
-
+//FUNCTION TO FETCH THE FIRST NODE OF THE LIST
 huffNode *firstNode(nodeLists* list){
   if (list->front == -1) return NULL;
   return list->array[list->front];
 }
 
-
+//FUNCTION TO FIND THE NODE WITH THE MINIMUM FREQUENCY FROM BOTH LISTS
 huffNode *findMin(nodeLists *l1, nodeLists *l2){
   if(l1->front ==-1){
     return(subFromList(l2));
@@ -104,7 +113,7 @@ huffNode *findMin(nodeLists *l1, nodeLists *l2){
   return subFromList(l2);
 }
 
-
+//FUNCTION TO CREATE HUFF TREE AND FIND THE BASE/ROOT NODE
 huffNode *huffTree(nodeLists *l1, nodeLists *l2,char data[], int freqs[], int size){
   huffNode *left;
   huffNode *right;
@@ -124,6 +133,7 @@ huffNode *huffTree(nodeLists *l1, nodeLists *l2,char data[], int freqs[], int si
   return subFromList(l2);
 }
 
+//FUNCTION TO PRINT THE BINARY VALUE OF THE CHARACTERS USING THE HUFF TREE
 void printCodes(int codeArray[], int parent, huffNode *base){
   if (base->left){
     codeArray[parent] = 0;
@@ -142,6 +152,8 @@ void printCodes(int codeArray[], int parent, huffNode *base){
   }
 }
 
+
+// FUNCTION TO INITIATE CALL HUFFTREE,PRINT AND FREE FUNCTIONS
 void HuffmanCodes(huffData *array){
   int parent = 0;
   int cArray[treeHeight];
@@ -149,12 +161,14 @@ void HuffmanCodes(huffData *array){
   nodeLists *l2 = newList(array->size);
   huffNode *base = huffTree(l1, l2,array->data, array->frequencies, array->size);
   printCodes(cArray, parent,base);
-  freeHuffman(l1,l2,array);
+  freeHuffman(l1,l2,array,base);
 }
 
-void freeHuffman(nodeLists *l1, nodeLists *l2, huffData *array){
+//FREE FUNCTION TO CALL OTHER FREE FUNCTIONS
+void freeHuffman(nodeLists *l1, nodeLists *l2, huffData *array,huffNode *base){
   freeTree(l1);
   freeTree(l2);
+  freeNode(base);
   freeData(array);
 }
 
@@ -205,36 +219,38 @@ int testGetFreq(int input, int freqs[], int index){
   return 1;
 }
 
-huffData *initialiseInput(int arrLen){
+//INITIALISES USER INPUT, CREATES DATA STRUCTURE FOR FREQUENCIES AND CHARACTERS
+huffData *initialiseInput(const int arrLen){
   int freqs[arrLen];
   char chars[arrLen+1];
   huffData *arr = newHeapArr(arrLen,getHeapData(arrLen,chars), getHeapFreq(arrLen, freqs));
-  printf("CharArray: %s, Number of Chars: %d\n", arr->data,arr->size);
+  printf("Characters: %s, Number of Characters: %d\n", arr->data,arr->size);
   for (int i = 0; i < arrLen; i++){
     printf("Frequency of %c: %d\n", arr->data[i], arr->frequencies[i]);
   }
   return arr;
 }
 
-int getSize(){
-  bool valid = false;
+//GETS THE AMOUNT OF CHARACTERS TO BE ENCODED, CHECKS IF AMOUUN IS VALID
+int getData(){
   int size;
   char line[100];
-  while(valid == false){
+  bool valid = false;
+  while (valid == false){
     printf( "How many characters do you want to encode?: \n");
     fgets(line,sizeof(line), stdin);
     sscanf(line, "%d", &size);
-    if (isdigit(size)){
-      valid = true;
+    if (size<=1){
+      printf("Size needs to be bigger than 1\n");
     }
-    else printf("Size invalid, try again \n");
+    else valid = true;
   }
   return size;
 }
+
 //DRIVER
 int main(){
-  int size;
-  size = getSize();
+  int size = getData();
   huffData *arr = initialiseInput(size);
   HuffmanCodes(arr);
   return 0;
