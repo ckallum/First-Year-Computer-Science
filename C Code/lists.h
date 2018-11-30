@@ -20,7 +20,7 @@ The lists provided by this module are not thread safe. */
 #include <stdbool.h>
 
 // The type of items stored in the list. Change this for different applications.
-typedef double item;
+typedef int item;
 
 // The list type is opaque (declared here, and defined in lists.c).
 struct list;
