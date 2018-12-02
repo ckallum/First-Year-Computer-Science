@@ -240,7 +240,7 @@ int getData(){
     printf( "How many characters do you want to encode?: \n");
     fgets(line,sizeof(line), stdin);
     sscanf(line, "%d", &size);
-    if (size<=1){
+    if (size <= 1){
       printf("Size needs to be bigger than 1\n");
     }
     else valid = true;
