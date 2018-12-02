@@ -1,10 +1,7 @@
-  This is a simple program that takes a string as an input and outputs the longest
-  substring in the string that is in alphabetical order. The tests are there to make sure
-  that the input is in the correct format(should output "Input is Invalid" if the input has a
-  character that isn't in the English alphabet). To check if all tests pass you should type "./StringEvaluation"
-  The reasons for printing "Start at Index:" and "Length:" was to primarily verify that my logic is correct
-  when finding the alphabetical substring. "Start at Index" signifies the index of the inputed string  
-  that the substring starts at. The "Length" is simply the length of the string.
-    I've found out that I could've used dynamic
-  programming and vectors to make the program more efficient but I didn't have enough time
-  to implement/learn how to use it.
+This is a Huffman Coding program. It includes a simple way for the user to interact with the
+program, where the user inputs how many characters they want to code, the characters
+they want to encode(input one at a time) and the corresponding frequencies in ascending order.
+There is some guards that make sure the input is in the correct format. However, I didn't
+manage to implement a way to prevent the user from inputing a character instead of
+a number. There isn't any testing because I didn't know how to implement it but the output should
+be enough to know that the program is working. Also the 'list' is techincally a queue.

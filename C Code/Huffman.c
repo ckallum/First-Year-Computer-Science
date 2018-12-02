@@ -5,12 +5,14 @@
 #define treeHeight 100 //GLOBAL VARIABLE FOR MAXIMUM TREE HEIGHT
 
 //STRUCT SECTION
+//Structure for the data.
 struct huffData{
   int size;
   char *data;
   int *frequencies;
 };
 
+//Structure for the node's in the tree
 struct huffNode{
   huffNode *left;
   huffNode *right;
@@ -18,6 +20,7 @@ struct huffNode{
   unsigned freq;
 };
 
+//Structure for the lists/queue containing the nodes.
 struct nodeLists{
   int front;
   int back;
@@ -74,6 +77,7 @@ void freeNode(huffNode *n){
 }
 
 //INSERTION AND DELETION FUNCTIONS
+//Add's node to end of list, updates back point in list.
 void add2List(nodeLists *l, huffNode *n){
   if(l->back == l->capacity-1)return;
   l->back = l->back +1;
@@ -83,6 +87,7 @@ void add2List(nodeLists *l, huffNode *n){
   }
 }
 
+//Get's the first node in the list and increment's first pointer in list.
 huffNode *subFromList(nodeLists *l){
   if(l->front==-1)return NULL;
   huffNode *t = l->array[l->front];
@@ -153,7 +158,7 @@ void printCodes(int codeArray[], int parent, huffNode *base){
 }
 
 
-// FUNCTION TO INITIATE CALL HUFFTREE,PRINT AND FREE FUNCTIONS
+// FUNCTION TO CALL HUFFTREE,PRINT AND FREE FUNCTIONS
 void HuffmanCodes(huffData *array){
   int parent = 0;
   int cArray[treeHeight];
@@ -173,7 +178,7 @@ void freeHuffman(nodeLists *l1, nodeLists *l2, huffData *array,huffNode *base){
 }
 
 //IO
-//Get's the frequencies of corresponding data to be encoded
+//Get's the frequencies of corresponding data from stdin to be encoded
 int *getHeapFreq(const int arrLen, int freqs[]){
   char line[100];
   int freq;
@@ -231,7 +236,7 @@ huffData *initialiseInput(const int arrLen){
   return arr;
 }
 
-//GETS THE AMOUNT OF CHARACTERS TO BE ENCODED, CHECKS IF AMOUUN IS VALID
+//GETS THE AMOUNT OF CHARACTERS TO BE ENCODED, CHECKS IF AMOUNT IS VALID
 int getData(){
   int size;
   char line[100];
