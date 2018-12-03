@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<ctype.h>
+#include <string.h>
 #include "Huffman.h"
 #define treeHeight 100 //GLOBAL VARIABLE FOR MAXIMUM TREE HEIGHT
 
@@ -180,17 +181,15 @@ void freeHuffman(nodeLists *l1, nodeLists *l2, huffData *array,huffNode *base){
 //IO
 //Get's the frequencies of corresponding data from stdin to be encoded
 int *getHeapFreq(const int arrLen, int freqs[]){
-  char line[100];
-  int freq;
+  int converted = 0;
   for (int i=0; i< arrLen; i++){
     printf( "Enter the sorted frequencies(smallest to largest) of the chars: \n");
-    fgets(line,sizeof(line), stdin);
-    sscanf(line, "%d", &freq);
-    if(testGetFreq(freq, freqs, i)== -1){
+    converted = testForInt(converted);
+    if(testGetFreq(converted, freqs, i)== -1){
       printf("This input is invalid, Try again\n");
       i--;
     }
-    else freqs[i] = freq;
+    else freqs[i] = converted;
   }
   return freqs;
 }
@@ -203,25 +202,46 @@ char *getHeapData(const int arrLen, char chars[]){
     printf( "What characters do you want to encode?: \n");
     fgets(line,sizeof(line), stdin);
     sscanf(line, "%c", &ch);
-    if(testGetData(ch)==-1){
-      printf("This input is invalid, Try again\n");
-      i--;
-    }
-    else chars[i] = ch;
+    chars[i] = ch;
   }
   chars[arrLen] = '\0';
   return chars;
 }
 
-//Tests that the input's are valid
-int testGetData(char input){
-  if(!isalpha(input))return -1;
-  return 1;
-}
+//tEST'S FOR VALID INPUT
 
+//Makes sure the frequency is bigger than the previous frequency
 int testGetFreq(int input, int freqs[], int index){
   if ((index > 0) && (input < freqs[index-1])) return -1;
   return 1;
+}
+
+//Test to make sure the input is an integer
+int testForInt(int converted){
+  char size[100];
+  char line[100];
+  bool valid = false;
+  while (valid == false){
+    valid = false;
+    fgets(line,sizeof(line), stdin);
+    sscanf(line, "%s", size);
+    if (size[0] == '\0'){
+      printf("Enter a valid input, try again\n");
+    }
+    else {
+      for (int i = 0; i<strlen(size); i++){
+        if (!isdigit(size[i])){
+          printf("Input needs to be an integer, try again\n");
+          valid = false;
+          break;
+        }
+        else valid = true;
+      }
+    }
+    char *ptr;
+    converted = strtol(size, &ptr, 10);
+  }
+  return converted;
 }
 
 //INITIALISES USER INPUT, CREATES DATA STRUCTURE FOR FREQUENCIES AND CHARACTERS
@@ -238,19 +258,14 @@ huffData *initialiseInput(const int arrLen){
 
 //GETS THE AMOUNT OF CHARACTERS TO BE ENCODED, CHECKS IF AMOUNT IS VALID
 int getData(){
-  int size;
-  char line[100];
-  bool valid = false;
-  while (valid == false){
-    printf( "How many characters do you want to encode?: \n");
-    fgets(line,sizeof(line), stdin);
-    sscanf(line, "%d", &size);
-    if (size <= 1){
-      printf("Size needs to be bigger than 1\n");
-    }
-    else valid = true;
+  int converted = 0;
+  printf( "How many characters do you want to encode?: \n");
+  converted = testForInt(converted);
+  if (converted <= 1){
+    printf("Size needs to be bigger than 1, try again\n");
+    converted = getData();
   }
-  return size;
+  return converted;
 }
 
 //DRIVER
