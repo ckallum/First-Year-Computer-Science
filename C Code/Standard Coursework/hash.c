@@ -8,67 +8,112 @@
 
 struct Node{
   Node *next;
-  int key;
-  int value;
-};
-
-struct SLL{
-  Node *currentNode;
-  int capacity;
+  char *data;
 };
 
 struct HashTable{
-  SLL **array;
+  Node **array;
+  int arrayMax;
   int capacity;
+  int max;
 };
 
-Node *newNode(int key, int value){
+Node *newNode(char *data){
   Node *new = malloc(sizeof(Node));
-  *new = (Node) {NULL, key, value};
+  new->next = NULL;
+  new->data = data;
   return new;
 }
 
-SLL *newSLL(int capacity){
-  SLL *l = malloc(sizeof(SLL));
-  l->currentNode = NULL;
-  l->capacity = capacity;
-  return l;
-}
-
-HashTable *newHash(int k, int capacity){
+HashTable *newHash(int max){
   HashTable *h = malloc(sizeof(HashTable));
-  h->array[k] = newSLL(k);
-  h->capacity = capacity;
+  h->array = malloc(max*sizeof(Node));
+  for (int i = 0; i < max; i++){
+    h->array[i] = NULL;
+  }
+  h->capacity = 0;
+  h->arrayMax = 8;
+  h->max = 8;
   return h;
 }
 
-int HashFunction (char ch[]){
-  int key = 1;
+int HashFunction (char *ch, HashTable *h){
+  unsigned long hash = 0;
   int size = strlen(ch);
   for (int i = 0; i < size; i++){
-    key = 31*key + ch[i];
+    hash = 31*hash + ch[i];
   }
-  return key;
+  return (hash % h->max);
 }
 
-bool isEmpty(HashTable *h, int key){
-  if(h->array[key] == NULL) return true;
+bool isEmpty(HashTable *h, int index){
+  if(h->array[index] == NULL) return true;
   return false;
 }
 
-void insertHash(HashTable *h, char ch[]){
-  int key = HashFunction(ch);
-  if (isEmpty(h,key)==true){
-    h->array[key]->currentNode = newNode(key,*ch);
+bool HashFull(HashTable *h){
+  if (h->capacity == 8) return true;
+  return false;
+
+}
+
+bool ListFull(HashTable *h, int index){
+  int count = 0;
+  Node *temp = h->array[index];
+  while (temp != NULL){
+      count ++;
+      temp = temp->next;
+  }
+  if (count == (h->max*(3/4))) return true;
+  return false;
+}
+
+int findKinI(HashTable *h, int index, char *data){
+  Node *temp = h->array[index];
+  int listIndex = 0;
+  while (temp != NULL){
+    if(strcmp(temp->data,data)==0) return listIndex;
+    temp = temp->next;
+    listIndex++;
+  }
+  return -1;
+}
+
+void increaseHash(HashTable *h){
+  h->max = h->max*2;
+  h->array = realloc(h->array, h->max);
+}
+
+void reHash(HashTable *h){
+
+}
+
+void insertHash(HashTable *h, char *ch){
+  int index = HashFunction(ch, h);
+  Node *new = newNode(ch);
+  if (HashFull(h) == true){
+    increaseHash(h);
+    insertHash(h,ch);
+  }
+  else if (isEmpty(h, index)==true){
+    h->array[index]=new;
+    ++h->capacity;
   }
   else{
-    h->array[key]->currentNode->next = newNode(key,*ch);
-    h->array[key]->currentNode = h->array[key]->currentNode->next;
+    if (ListFull(h, index)) index++;
+    Node *nextNode = h->array[index]->next;
+    h->array[index]->next = new;
+    new->next = nextNode;
+    ++h->capacity;
   }
 }
 
 
 
 int main(){
+  HashTable *h = newHash(8);
+  char *c = malloc(6*sizeof(char));
+  c = "Johns\0";
+  insertHash(h, c);
   return 0;
 }
