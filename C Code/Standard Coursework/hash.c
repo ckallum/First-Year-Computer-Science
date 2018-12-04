@@ -64,7 +64,7 @@ bool ListFull(HashTable *h, int index){
       count ++;
       temp = temp->next;
   }
-  if (count == (h->max*(3/4))) return true;
+  if (count == 8) return true;
   return false;
 }
 
@@ -92,7 +92,13 @@ void insertHash(HashTable *h, char *ch){
   int index = HashFunction(ch, h);
   Node *new = newNode(ch);
   if (HashFull(h) == true){
-    increaseHash(h);
+    while(ListFull(h,index) == true){
+      if (index==h->max){
+        increaseHash(h);
+        break;
+      }
+      else index ++;
+    }
     insertHash(h,ch);
   }
   else if (isEmpty(h, index)==true){
@@ -100,7 +106,6 @@ void insertHash(HashTable *h, char *ch){
     ++h->capacity;
   }
   else{
-    if (ListFull(h, index)) index++;
     Node *nextNode = h->array[index]->next;
     h->array[index]->next = new;
     new->next = nextNode;
