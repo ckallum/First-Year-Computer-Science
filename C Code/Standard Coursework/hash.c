@@ -5,70 +5,65 @@
 #include <string.h>
 #include "hash.h"
 
+//http://www.cs.yale.edu/homes/aspnes/pinewiki/C(2f)HashTables.html?highlight=%28CategoryAlgorithmNotes%29
+//https://github.com/jamesroutley/write-a-hash-table#contents
 
-struct Node{
-  Node *next;
-  char *data;
-};
-
-struct HashTable{
-  Node **array;
-  int capacity;
-  int max;
-};
-
-Node *newNode(char *data){
+Node *newNode(char *data, char *key){
   Node *new = malloc(sizeof(Node));
   new->next = NULL;
   new->data = data;
+  new->key = key;
   return new;
 }
 
-HashTable *newHash(){
+HashTable *newHash(int size){
   HashTable *h = malloc(sizeof(HashTable));
-  h->max = 8;
-  h->array = malloc(h->max*sizeof(Node));
-  for (int i = 0; i < h->max; i++){
-    h->array[i] = NULL;
-  }
-  h->capacity = 0;
+  h->size = size;
+  h->count = 0;
+  h->array = calloc(h->size, sizeof(Node));
   return h;
 }
 
+void freeNode(Node *item){
+  free(item->key);
+  free(item->data);
+  free(item);
+}
+
 void freeHash(HashTable *h){
-  for (int i = 0; i < h->max; i++){
-    if(h->array[i]==NULL) free(h->array[i]);
-    else {
-      Node *temp = h->array[i];
-      Node *next = temp->next;
-      while(temp != NULL){
-        free(temp);
-        temp = next;
-        next = temp->next;
-      }
+  int i;
+  Node *temp;
+  Node *next;
+  for(i=0;i < h->size;i++){
+    for (temp = h->array[i]; temp!= NULL; temp = next){
+      next = temp->next;
+      freeNode(temp);
     }
   }
+  free(h->array);
+  free(h);
 }
 
-int HashFunction (char *ch, HashTable *h){
-  unsigned long hash = 0;
-  int size = strlen(ch);
+int HashFunction (const char *key, HashTable *h){
+  unsigned long hash = 1;
+  int size = strlen(key);
   for (int i = 0; i < size; i++){
-    hash = 31*hash + ch[i];
+    hash = 31*hash + key[i];
   }
-  return (hash % h->max);
+  return (hash % h->size);
 }
 
-bool isEmpty(HashTable *h, int index){
+
+bool ListEmpty(HashTable *h, int index){
   if(h->array[index] == NULL) return true;
   return false;
 }
 
-int findKinI(HashTable *h, int index, char *data){
+int getIndex(HashTable *h, int index, char *key){
   Node *temp = h->array[index];
   int listIndex = 0;
   while (temp != NULL){
-    if(strcmp(temp->data,data)==0) return listIndex;
+    if(strcmp(temp->key,key)==0) return listIndex;
     temp = temp->next;
     listIndex++;
   }
@@ -77,45 +72,19 @@ int findKinI(HashTable *h, int index, char *data){
 
 Node *getNode(HashTable *h, int listIndex,int index){
   Node *temp =h->array[index];
-  for (int i = 0 ; i<= listIndex; i++){
+  for (int i = 0 ; i< listIndex; i++){
     temp = temp->next;
   }
   return temp;
 }
 
-bool HashFull(HashTable *h){
-  if ((h->capacity/h->max) >= 0.75){
-    return true;
-  }
-  return false;
-}
-
-
-void reHash(HashTable *h){
-  HashTable *temp = h;
-  int newMax = (h->max) *2;
-  h->max = newMax;
-  h->array = realloc(h->array, h->max * sizeof(Node));
-  for (int i = 0; i < h->max; i++){
-    h->array[i] = NULL;
-  }
-  for (int i = 0; i < temp->max; i++){
-    Node *tempNode = temp->array[i];
-    if (tempNode == NULL) i++;
-    while(tempNode != NULL){
-      insertHash(h, tempNode->data);
-      tempNode = tempNode->next;
-    }
-  }
-}
-
-void insertHash(HashTable *h, char *ch){
-  int index = HashFunction(ch, h);
-  Node *new = newNode(ch);
-  int listIndex = findKinI(h, index, ch);
-  if (isEmpty(h, index)==true){
+void insert(HashTable *h, char *key, char *ch){
+  int index = HashFunction(key, h);
+  Node *new = newNode(ch, key);
+  int listIndex = getIndex(h, index, key);
+  if (ListEmpty(h, index)==true){
     h->array[index]=new;
-    ++h->capacity;
+    ++h->count;
   }
   else if(listIndex != -1){
       Node *node = getNode(h, listIndex, index);
@@ -125,16 +94,85 @@ void insertHash(HashTable *h, char *ch){
     Node *nextNode = h->array[index]->next;
     h->array[index]->next = new;
     new->next = nextNode;
-    ++h->capacity;
+    ++h->count;
   }
-  if (HashFull(h)){
-    reHash(h);
+  if(HashFull(h)){
+    increaseSize(h);
+  }
+}
+
+char *search(HashTable *h, char *key){
+  int index = HashFunction(key, h);
+  Node *temp = h->array[index];
+  while (temp != NULL){
+    if (strcmp(temp->key,key)==0) return temp->data;
+    else temp = temp->next;
+  }
+  return NULL;
+}
+
+void delete(HashTable *h, char *key){
+  int index = HashFunction(key, h);
+  Node *node = h->array[index];
+  Node *temp = node;
+  if(node == NULL){
+    printf("This key has no data\n");
+    return;
+  }
+  while(node!=NULL){
+    if (strcmp(node->key, key)==0){
+      if (node == h->array[index]){
+        h->array[index] = node->next;
+      }
+      else {
+        temp->next = node->next;
+      }
+      h->count--;
+      free(node);
+      break;
+    }
+    temp = node;
+    node = node->next;
+  }
+}
+
+bool HashFull(HashTable *h){
+  if((h->count*100 / h->size)>70) return true;
+  return false;
+}
+
+bool HashEmpty(HashTable *h){
+  if((h->count*100 / h->size)<10) return true;
+  return false;
+}
+
+void increaseSize(HashTable *h){
+  const int newSize = h->size *2;
+  rehash(h, newSize);
+}
+
+
+void rehash(HashTable *h, int newSize){
+  HashTable *temp = h;
+  int newsize = (h->size) *2;
+  h->size = newsize;
+  h->array = realloc(h->array, h->size * sizeof(Node));
+  for (int i = 0; i < h->size; i++){
+    h->array[i] = NULL;
+  }
+  for (int i = 0; i < temp->size; i++){
+    Node *tempNode = temp->array[i];
+    if (tempNode == NULL) i++;
+    while(tempNode != NULL){
+      insert(h, tempNode->data, tempNode->key);
+      tempNode = tempNode->next;
+    }
   }
 }
 
 void printHash(HashTable *h){
   int i = 0;
-  for (i = 0; i < h->max; i++){
+  for (i = 0; i < h->size; i++){
     Node *temp = h->array[i];
     if (temp == NULL){
       printf("array[%d] has no elements\n", i);
@@ -142,7 +180,7 @@ void printHash(HashTable *h){
     else{
       printf("array[%d] has elements-: ", i);
       while (temp != NULL){
-        printf("value= %s\t", temp->data);
+        printf("key= %s, value= %s\t",temp->key, temp->data);
         temp = temp->next;
       }
       printf("\n");
@@ -152,18 +190,16 @@ void printHash(HashTable *h){
 
 
 int main(){
-  HashTable *h = newHash();
-  printf("How many characters would you like to insert\n");
-  char line[100];
-  int size;
-  fgets(line,sizeof(line), stdin);
-  sscanf(line, "%d", &size);
-  for (int i = 0; i<size; i++){
-    printf("What character would you like to hash?\n");
-    fgets(line, 100, stdin);
-    insertHash(h, line);
-  }
+  HashTable *h = newHash(10);
+  insert(h, "31","john");
+  insert(h, "32","john");
+  insert(h, "33","john");
+  insert(h, "34","john");
   printHash(h);
-  freeHash(h);
+  delete(h, "31");
+  printHash(h);
+  delete(h, "32");
+  printHash(h);
+  // freeHash(h);
   return 0;
 }
