@@ -20,8 +20,16 @@ struct HashTable{
 bool HashFull(HashTable *h);
 bool HashEmpty(HashTable *h);
 void increaseSize(HashTable *h);
-void decreaseSize(HashTable *h);
 
 
 void rehash(HashTable *h, int newSize);
 void insert(HashTable *h, char *key, char *ch);
+
+void test();
+void testHF();
+void testGetIndex();
+void testInsert();
+void testSearch();
+void testDelete();
+void testRehash();
+void testPrint();
