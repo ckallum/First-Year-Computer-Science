@@ -186,9 +186,10 @@ void printHash(HashTable *h){
     else{
       printf("array[%d] has elements-: ", i);
       while (temp != NULL){
-        printf("key= %s, value= %s\n",temp->key, temp->data);
+        printf("key= %s, value= %s ",temp->key, temp->data);
         temp = temp->next;
       }
+      printf("\n");
     }
   }
   printf("\n\\");
