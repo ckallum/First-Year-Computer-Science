@@ -10,156 +10,123 @@
 
 
 #ifdef test_lists
-struct node;
+struct node { struct node *back; item x; struct node *next; };
 typedef struct node node;
-struct list{
-  node *sentinel;
-  node *currentNode;
-};
 
-struct node{
-  node *before;
-  node *next;
-  item nodeVal;
-};
+struct list { node *left; node *current; node *right; };
 
-list *newList(item d){
-  list *new = malloc(sizeof(list));
-  new->currentNode = malloc(sizeof(node));
-  new->sentinel = malloc(sizeof(node));
-  *new = (list) {new->sentinel, new->currentNode};
-  *new->currentNode = (node) {new->sentinel, new->sentinel,0};
-  *new->sentinel = (node) {new->currentNode, new->currentNode, -1};
-  return new;
+list *newList(item d) {
+    list *l = malloc(sizeof(list));
+    l->left = malloc(sizeof(node));
+    l->right = l->left;
+    *(l->left) = (node) { l->right, d, l->right };
+    l->current = l->left->next;
+    return l;
 }
 
 // Free up the list and all the data in it.
-void freeList(list *l){
-  l->currentNode = l->sentinel->before;
-  while (l->currentNode->before != l->sentinel){
-    l->currentNode = l->currentNode->before;
-    free(l->currentNode->next);
-  }
-  free(l->currentNode);
-  free(l->sentinel);
-  free(l);
+void freeList(list *l) {
+    l->left = l->left->next;
+    while (l->left != l->right) {
+        l->current = l->left->next;
+        free(l->left);
+        l->left = l->current;
+    }
+    free(l->right);
+    free(l);
 }
-
 // Set the current position before the first item or after the last item,
 // to begin a forward or backward traversal.
-void startF(list *l){
-  l->currentNode = l->sentinel->next;
+void startF(list *l) {
+    l->current = l->left->next;
 }
 
-void startB(list *l){
-  l->currentNode = l->sentinel->before;
+void startB(list *l) {
+    l->current = l->right;
 }
 
-// Check whether the current position is at the end or start, to test
-// whether a traversal has finished.
-bool endF(list *l){
-  if (l->currentNode->next == l->sentinel) return true;
-  return false;
+bool endF(list *l) {
+    return l->current == l->right;
 }
 
-bool endB(list *l){
-  if (l->currentNode->before == l->sentinel) return true;
-  return false;
+bool endB(list *l) {
+    return l->current == l->left->next;
 }
 
 // Move the current position one place forwards or backwards, and return true.
 // If nextF is called when at the end of the list, or nextB when at the start,
 // the functions do nothing and return false.
-bool nextF(list *l){
-  if (endF(l)==true) return false;
-  else{
-    l->currentNode=l->currentNode->next;
+bool nextF(list *l) {
+    if (endF(l)) return false;
+    l->current = l->current->next;
     return true;
-  }
 }
 
-bool nextB(list *l){
-  if(endB(l)==true) return false;
-  else{
-    l->currentNode = l->currentNode->before;
+bool nextB(list *l) {
+    if (endB(l)) return false;
+    l->current = l->current->back;
     return true;
-  }
 }
 
 // Insert an item before the current position during a traversal.  The traversal
 // of the remaining items is not affected.
-void insertF(list *l, item x){
-  node *new = malloc(sizeof(node));
-  node *prevNode = l->currentNode->before;
-  new -> nodeVal = x;
-  new -> next = l->currentNode;
-  new -> before = prevNode;
-  l->currentNode->before = new;
-  prevNode->next = new;
+void insertF(list *l, item x) {
+    node *new = malloc(sizeof(node));
+    *new = (node) { l->current->back, x, l->current };
+    l->current->back->next = new;
+    l->current->back = new;
 }
 
-void insertB(list *l, item x){
-  node *new = malloc(sizeof(node));
-  node *nextNode = l->currentNode->next;
-  new ->nodeVal = l->currentNode->nodeVal;
-  l->currentNode->nodeVal = x;
-  new->next = nextNode;
-  new->before= l->currentNode;
-  nextNode->before = new;
-  l->currentNode->next = new;
+void insertB(list *l, item x) {
+    insertF(l, x);
+    l->current = l->current->back;
 }
 
 // Get the current item. If getF is called when at the end, or getB is called
 // when at the start, the default item is returned.
-item getF(list *l){
-  if (endF(l) == true) return l->sentinel->nodeVal;
-  return l->currentNode->nodeVal;
+item getF(list *l) {
+    return l->current->x;
 }
 
-item getB(list *l){
-  if (endB(l)== true) return l->sentinel->nodeVal;
-  return l->currentNode->before->nodeVal;
+item getB(list *l) {
+    return l->current->back->x;
 }
+
 
 // Set the current item and return true. If setF is called when at the end, or
 // setB when at the start, nothing is done and false is returned.
-bool setF(list *l, item x){
-  if(endF(l)==true) return false;
-  l->currentNode->nodeVal=x;
-  return true;
+bool setF(list *l, item x) {
+    if (endF(l)) return false;
+    l->current->x = x;
+    return true;
 }
 
-bool setB(list *l, item x){
-  if(endB(l)==true) return false;
-  l->currentNode->before->nodeVal=x;
-  return true;
+bool setB(list *l, item x) {
+    if (endB(l)) return false;
+    l->current->back->x = x;
+    return true;
 }
 
 // Delete the current item and return true. When iterating forward, either nextF
 // or deleteF should be called to delete or step past each item. If deleteF/B is
 // called at the start/end of the list, nothing is done and false is returned.
-bool deleteF(list *l){
-  if((l->currentNode==l->sentinel)|| (l->currentNode->next == l->sentinel) ) return false;
-  else{
-    node *prevNode = l->currentNode->before;
-    l->currentNode = l->currentNode->next;
-    free (l->currentNode->before);
-    prevNode->next = l->currentNode;
-    l->currentNode->before = prevNode;
+bool deleteF(list *l) {
+    if (endF(l)) return false;
+    l->current->back->next = l->current->next;
+    l->current->next->back = l->current->back;
+    node *old = l->current;
+    l->current = l->current->next;
+    free(old);
     return true;
-  }
 }
 
-bool deleteB(list *l){
-  if (l->currentNode->before == l->sentinel) return false;
-  else{
-    node*prevNode = l->currentNode->before->before;
-    free(l->currentNode->before);
-    l->currentNode->before = prevNode;
-    prevNode->next = l->currentNode;
+bool deleteB(list *l) {
+    if (endB(l)) return false;
+    nextB(l);
+    deleteF(l);
     return true;
-  }
 }
+
 
 // Convert a string description to a list.
 static list *toList(char *pic) {
