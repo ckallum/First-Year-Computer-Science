@@ -6,14 +6,15 @@
 void hex();
 
 void convert(char input[]){
-  char str[3];
+  // char str[3];
   FILE *in = fopen(input, "rb");
   unsigned char b = fgetc(in);
   while (! feof(in)) {
-    hex(b, str);
-    printf("%s\n",str);
+    // hex(b, str);
+    printf("%02x ",b);
     b = fgetc(in);
   }
+  printf("\n");
   fclose(in);
 }
 
