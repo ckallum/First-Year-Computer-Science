@@ -13,12 +13,17 @@ struct state {
 };
 typedef struct state state;
 
-void opCode(int n, int op[]){
-  op[0] = (n>>6);
-  op[1] = n & 0x3F;
-  if (op[1] > 31){
-    op[1] = op[1] - 64;
+int opcode(int n, int op){
+  op = (n>>6);
+  return op;
+}
+
+int operand(int n, int op){
+  op = n & 0x3F;
+  if (op > 31){
+    op = op - 64;
   }
+  return op;
 }
 
 state *newState(){
@@ -32,30 +37,38 @@ state *newState(){
 }
 
 
-void drawY(state *s, display *d, int n){
-  s->cy = s->cy+n;
+void dy(display *d, state *s, int n){
   s->py = s->cy;
-  s->px = s->cx;
+  s->cy = s->cy+n;
   if (s->pen == true){
     line(d, s->px, s->py, s->cx, s->cy);
   }
 }
 
-void delay(display *d){
+void dx(display *d,state *s, int n){
   pause(d, 10);
-  
+  s->px = s->cx;
+  s->cx = s->cx+n;
 }
 
 
 
-void update(){
-  if (op[0] == DX) changeX(s, d, op[1]);
-  if (op[0] == DY) drawY(s, d, op[1]);
+
+void update(display *d, int n, state *s){
+  int op = 0;
+  int opc = opcode(n, op);
+  int oper = operand(n, op);
+  // printf("%d\n",opcode);
+  // printf("%d\n",oper);
+  if (opc == DX) dx(d, s, oper);
+  if (opc == DY) dy(d, s, oper);
+  if (opc == PEN && s->pen ==false) s->pen = true;
+  else s->pen = false;
 
 }
 
-void initialise(int n, display *d, state *s){
-
+void initialise(display *d, int n, state *s){
+  update(d, n, s);
 }
 
 
@@ -63,7 +76,7 @@ void readFile(display *d, char inputfile[], state *s){
   FILE *in = fopen(inputfile, "rb");
   unsigned int n = fgetc(in);
   while (! feof(in)) {
-    initialise(n, d, s);
+    initialise(d, n, s);
     n = fgetc(in);
   }
   fclose(in);
@@ -78,5 +91,6 @@ int main(int n, char *args[n]){
     display *d = newDisplay(args[1], 200, 200);
     readFile(d, args[1], s);
     end(d);
-
+    free(s);
+    return 0;
 }
