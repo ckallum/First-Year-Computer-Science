@@ -6,6 +6,7 @@
 
 struct state {
   int px, py, cx, cy;
+  display *d;
   bool pen;
 };
 typedef struct state state;
@@ -37,16 +38,16 @@ state *newState(){
 
 
 void dy(display *d, state *s, int n){
-  s->py = s->cy;
   s->cy = s->cy+n;
   if (s->pen == true){
     line(d, s->px, s->py, s->cx, s->cy);
   }
+  s->px = s->cx;
+  s->py = s->cy;
 
 }
 
-void dx(display *d,state *s, int n){
-  s->px = s->cx;
+void dx(state *s, int n){
   s->cx = s->cx+n;
 }
 
@@ -57,7 +58,7 @@ void update(display *d, int n, state *s){
   int opc = opcode(n);
   int oper = operand(n);
   printf("%d, %d\n", opc, oper);
-  if (opc == 0) dx(d, s, oper);
+  if (opc == 0) dx(s, oper);
   else if (opc == 1) dy(d, s, oper);
   else if (opc == 3 && s->pen ==false) s->pen = true;
   else s->pen = false;
