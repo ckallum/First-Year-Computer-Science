@@ -3,11 +3,11 @@
 #include "display.h"
 #include <ctype.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 struct state {
   int x, y, dx, dy;
-  int operand;
-  int PRCount;
+  long operand;
   int DT;
   display *display;
   bool pen;
@@ -20,7 +20,7 @@ int opcode(int n){
 }
 
 int operand(int n){
-  int op;
+  long op;
   op = n & 0x3F;
   if (op > 31){
     op = op - 64;
@@ -40,7 +40,6 @@ state *newState(){
   s->dy = 0;
   s->operand = 0;
   s->DT = 0;
-  s->PRCount = 0;
   s->pen = false;
   s->init = false;
   return s;
@@ -48,28 +47,48 @@ state *newState(){
 
 
 void dy(state *s, int n){
-  s->dy = s->dy+operand(n);
+  s->operand = (s->operand<<6) | operand(n);
+  s->dy = s->dy+s->operand;
   if (s->pen == true){
-    line(s->display, s->x, s->y, s->dx, s->dy);
+    line(s->display, s->x, s->y, (s->x + s->dx), s->dy);
   }
-  s->x = s->dx;
+  s->x = s->x + s->dx;
+  s->dx = 0;
   s->y = s->dy;
-  s->PRCount = 0;
+  s->operand = 0;
 
 }
 
 void dx(state *s, int n){
-  s->dx = s->dx+operand(n);
-  s->PRCount = 0;
+  s->operand = (s->operand<<6) | operand(n);
+  s->dx = s->operand;
+  s->operand = 0;
 }
 
 void updateOp(state *s, int n){
-  s->operand = (s->operand << 6) || operand(n);
-  s->PRCount++;
+  s->operand = (s->operand << 6) | operand(n);
 }
 
-void findDO(state *s){
-  switch ((s->operand & 0x3F)+3);
+void findDO(state *s, int n){
+  switch (operand(n)){
+    case 0:
+      if (s->pen == false) s->pen = true;
+      else s->pen = false;
+      break;
+    case 1:
+      if (s->operand != 0) s->DT = s->operand;
+      else pause(s->display, s->DT);
+      break;s->operand = 0;s->operand = 0;
+    case 2:
+      clear(s->display);
+      break;
+    case 3:
+      key(s->display);
+      break;
+    case 4:
+      colour(s->display, s->operand);
+      break;
+  }
 }
 
 
@@ -77,7 +96,6 @@ void findDO(state *s){
 
 void getOp(int n, state *s){
   int opc = opcode(n);
-  printf("%d, %d\n", opc, operand(n));
   switch (opc) {
     case 0:
       dx(s, n);
@@ -87,11 +105,11 @@ void getOp(int n, state *s){
       break;
     case 2:
       updateOp(s, n);
-    case 3:
-      if (s->pen == false) s->pen = true;
-      else s->pen = false;
-      break;
+    }
+  if (opc >2){
+    findDO(s, n);
   }
+  printf("operand = %ld, x = %d, y = %d, dx = %d, dy = %d,     %d, %d\n",s->operand, s->x, s->y, s->dx, s->dy, opc, operand(n));
 }
 
 void initialise(int n, state *s){
