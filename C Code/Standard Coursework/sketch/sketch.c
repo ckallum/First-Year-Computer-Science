@@ -5,8 +5,9 @@
 #include <stdbool.h>
 
 struct state {
-  int px, py, cx, cy;
-  int currentOp;
+  int x, y, dx, dy;
+  int operand;
+  int PRCount;
   int DT;
   display *display;
   bool pen;
@@ -15,7 +16,7 @@ struct state {
 typedef struct state state;
 
 int opcode(int n){
-  return (n>>6);
+  return n>>6;
 }
 
 int operand(int n){
@@ -33,12 +34,13 @@ int increaseOp(state *s, int n){
 
 state *newState(){
   state *s = malloc(sizeof(state));
-  s->px = 0;
-  s->py = 0;
-  s->cx = 0;
-  s->cy = 0;
-  s->currentOp = 0;
+  s->x = 0;
+  s->y = 0;
+  s->dx = 0;
+  s->dy = 0;
+  s->operand = 0;
   s->DT = 0;
+  s->PRCount = 0;
   s->pen = false;
   s->init = false;
   return s;
@@ -46,36 +48,54 @@ state *newState(){
 
 
 void dy(state *s, int n){
-  s->cy = s->cy+n;
+  s->dy = s->dy+operand(n);
   if (s->pen == true){
-    line(s->display, s->px, s->py, s->cx, s->cy);
+    line(s->display, s->x, s->y, s->dx, s->dy);
   }
-  s->px = s->cx;
-  s->py = s->cy;
+  s->x = s->dx;
+  s->y = s->dy;
+  s->PRCount = 0;
 
 }
 
 void dx(state *s, int n){
-  s->cx = s->cx+n;
+  s->dx = s->dx+operand(n);
+  s->PRCount = 0;
+}
+
+void updateOp(state *s, int n){
+  s->operand = (s->operand << 6) || operand(n);
+  s->PRCount++;
+}
+
+void findDO(state *s){
+  switch ((s->operand & 0x3F)+3);
 }
 
 
 
 
-void update(int n, state *s){
+void getOp(int n, state *s){
   int opc = opcode(n);
-  int oper = operand(n);
-  printf("%d, %d\n", opc, oper);
-  if (opc == 2){};
-  if (opc == 0) dx(s, oper);
-  else if (opc == 1) dy(s, oper);
-  else if (opc == 3 && s->pen ==false) s->pen = true;
-  else s->pen = false;
-
+  printf("%d, %d\n", opc, operand(n));
+  switch (opc) {
+    case 0:
+      dx(s, n);
+      break;
+    case 1:
+      dy(s, n);
+      break;
+    case 2:
+      updateOp(s, n);
+    case 3:
+      if (s->pen == false) s->pen = true;
+      else s->pen = false;
+      break;
+  }
 }
 
 void initialise(int n, state *s){
-  update(n, s);
+  getOp(n, s);
 }
 
 
