@@ -54,9 +54,9 @@ void draw(state *s){
     s->operand = 0;
 }
 
-void doSwitch(state*s){
-  printf("%ld\n",(s->operand & 0xf));
-  switch (s->operand & 0xf){
+void doSwitch(int operand, state*s){
+  printf("----%d, %d\n",(operand & 0x7), operand);
+  switch (operand){
     case 0:
       if (s->pen == false) s->pen = true;
       else s->pen = false;
@@ -72,6 +72,8 @@ void doSwitch(state*s){
       break;
     case 4:
       colour(s->display, s->operand);
+      s->operand = 0;
+      s->count = 0;
       break;
   }
 }
@@ -107,10 +109,11 @@ void opSwitch(int opcode, int operand, state *s){
       extendOPER(operand,s);
       printf("%02lx\n",s->operand );
       break;
-  }
-  if (opcode > 2){
-    doSwitch(s);
-  }
+    case 3:
+      // opcode = opcode &
+      doSwitch(operand, s);
+      break;
+    }
 }
 
 void initiate(byte b, state *s){
