@@ -10,7 +10,7 @@ struct state {
   int dx;
   int dy;
   int dt;
-  int operand;
+  long operand;
   bool pen;
   display *display;
 };
