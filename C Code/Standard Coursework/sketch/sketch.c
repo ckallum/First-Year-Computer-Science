@@ -3,82 +3,64 @@
 #include "display.h"
 #include <ctype.h>
 #include <stdbool.h>
-#include <stdint.h>
 
 struct state {
-  int x, y, dx, dy;
-  long operand;
-  int DT;
-  display *display;
+  int x;
+  int y;
+  int dx;
+  int dy;
+  int dt;
+  int operand;
   bool pen;
-  bool init;
+  display *display;
 };
 typedef struct state state;
+typedef unsigned char byte;
 
-int opcode(int n){
-  return n>>6;
-}
-
-int operand(int n){
-  long op;
-  op = n & 0x3F;
-  if (op > 31){
-    op = op - 64;
-  }
-  return op;
-}
-
-int increaseOp(state *s, int n){
-  return 0;
-}
-
-state *newState(){
+state *newState(display *disp){
   state *s = malloc(sizeof(state));
   s->x = 0;
   s->y = 0;
   s->dx = 0;
   s->dy = 0;
+  s->dt = 0;
   s->operand = 0;
-  s->DT = 0;
   s->pen = false;
-  s->init = false;
+  s->display = disp;
   return s;
 }
 
-
-void dy(state *s, int n){
-  s->operand = (s->operand<<6) | operand(n);
-  s->dy = s->dy+s->operand;
-  if (s->pen == true){
-    line(s->display, s->x, s->y, (s->x + s->dx), s->dy);
-  }
-  s->x = s->x + s->dx;
-  s->dx = 0;
-  s->y = s->dy;
-  s->operand = 0;
-
+int getOP(byte b){
+  return (b>>6);
 }
 
-void dx(state *s, int n){
-  s->operand = (s->operand<<6) | operand(n);
-  s->dx = s->operand;
-  s->operand = 0;
+int getOPER(byte b){
+  int temp;
+  temp = b & 0x3F;
+  return temp;
 }
 
-void updateOp(state *s, int n){
-  s->operand = (s->operand << 6) | operand(n);
+void draw(state *s){
+    s->dy = s->operand;
+    if (s->pen == true){
+      line(s->display, s->x, s->y, s->x + s->dx, s->y + s->dy);
+    }
+    s->x = s->x + s->dx;
+    s->y = s->y + s->dy;
+    s->dx = 0;
+    s->dy = 0;
+    s->operand = 0;
 }
 
-void findDO(state *s, int n){
-  switch (operand(n)){
+void doSwitch(int operand, state*s){
+  switch (operand){
     case 0:
       if (s->pen == false) s->pen = true;
       else s->pen = false;
       break;
     case 1:
-      if (s->operand != 0) s->DT = s->operand;
-      else pause(s->display, s->DT);
-      break;s->operand = 0;s->operand = 0;
+      s->dt = s->operand;
+      pause(s->display, s->dt);
     case 2:
       clear(s->display);
       break;
@@ -86,57 +68,64 @@ void findDO(state *s, int n){
       key(s->display);
       break;
     case 4:
-      colour(s->display, s->operand);
+      colour(s->display, operand);
       break;
   }
 }
 
+void extendOPER(int operand, state *s){
+  s->operand = (s->operand<<6) | operand;
+}
 
-
-
-void getOp(int n, state *s){
-  int opc = opcode(n);
-  switch (opc) {
+void opSwitch(int opcode, int operand, state *s){
+  switch(opcode){
     case 0:
-      dx(s, n);
+      extendOPER(operand, s);
+      s->dx = s->operand;
+      s->operand = 0;
       break;
     case 1:
-      dy(s, n);
+      extendOPER(operand, s);
+      draw(s);
       break;
     case 2:
-      updateOp(s, n);
-    }
-  if (opc >2){
-    findDO(s, n);
+      extendOPER(operand, s);
+      break;
   }
-  printf("operand = %ld, x = %d, y = %d, dx = %d, dy = %d,     %d, %d\n",s->operand, s->x, s->y, s->dx, s->dy, opc, operand(n));
+  if (opcode > 2){
+    doSwitch(operand, s);
+  }
 }
 
-void initialise(int n, state *s){
-  getOp(n, s);
+void initiate(byte b, state *s){
+  int opcode = getOP(b);
+  int operand = getOPER(b);
+  if (operand > 31 && opcode < 2) operand = operand - 64;
+  printf("opcode = %d ,operand = %d  \n",opcode, operand);
+  opSwitch(opcode, operand, s);
 }
 
-
-void readFile (char inputfile[], state *s){
-  FILE *in = fopen(inputfile, "rb");
-  unsigned int n = fgetc(in);
-  while (! feof(in)) {
-    initialise(n, s);
-    n = fgetc(in);
+void run(char filename[], display *d){
+  state *s = newState(d);
+  FILE *in = fopen(filename, "rb");
+  byte b = fgetc(in);
+  while (!feof(in)){
+    printf("%02x  ", b);
+    initiate(b,s);
+    b = fgetc(in);
   }
+  printf("\n");
   fclose(in);
 }
 
+
 int main(int n, char *args[n]){
-  if (n != 2) {
+  if(n != 2){
     fprintf(stdout, "Use ./sketch filename\n");
     exit(1);
   }
-    state *s = newState();
-    display *d = newDisplay(args[1], 200, 200);
-    s->display = d;
-    readFile(args[1], s);
-    end(d);
-    free(s);
-    return 0;
+  display *d = newDisplay(args[1], 200, 200);
+  run(args[1], d);
+  end(d);
+  return 0;
 }
