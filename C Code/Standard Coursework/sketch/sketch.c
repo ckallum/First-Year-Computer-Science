@@ -77,7 +77,7 @@ void doSwitch(int operand, state*s){
 
 int checkSign(state *s){
   long temp = 1<<(6*(s->count)-1);
-  printf("%ld, %ld\n",temp, s->operand );
+  // printf("%ld, %ld\n",temp, s->operand );
   return ((s->operand & temp)== temp) ? s->operand - (temp*2) : s->operand;
 }
 
@@ -104,9 +104,11 @@ void opSwitch(int opcode, int operand, state *s){
       break;
     case 2:
       extendOPER(operand,s);
+      printf("%02lx\n",s->operand );
       break;
   }
   if (opcode > 2){
+    printf("opcode = %d, operand = %d\n",opcode, operand );
     doSwitch(operand, s);
   }
 }
