@@ -78,6 +78,7 @@ void extendOPER(int operand, state *s){
 }
 
 void opSwitch(int opcode, int operand, state *s){
+  if (operand > 31 && opcode < 2) operand = operand - 64;
   switch(opcode){
     case 0:
       extendOPER(operand, s);
@@ -100,7 +101,6 @@ void opSwitch(int opcode, int operand, state *s){
 void initiate(byte b, state *s){
   int opcode = getOP(b);
   int operand = getOPER(b);
-  if (operand > 31 && opcode < 2) operand = operand - 64;
   printf("opcode = %d ,operand = %d  \n",opcode, operand);
   opSwitch(opcode, operand, s);
 }
