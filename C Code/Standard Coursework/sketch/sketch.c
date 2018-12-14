@@ -10,6 +10,7 @@ struct state {
   int dx;
   int dy;
   int dt;
+  int count;
   long operand;
   bool pen;
   display *display;
@@ -24,6 +25,7 @@ state *newState(display *disp){
   s->dx = 0;
   s->dy = 0;
   s->dt = 0;
+  s->count = 0;
   s->operand = 0;
   s->pen = false;
   s->display = disp;
@@ -73,24 +75,35 @@ void doSwitch(int operand, state*s){
   }
 }
 
-void extendOPER(int operand, state *s){
+int checkSign(state *s){
+  long temp = 1<<(6*(s->count)-1);
+  printf("%ld, %ld\n",temp, s->operand );
+  return ((s->operand & temp)== temp) ? s->operand - (temp*2) : s->operand;
+}
+
+void extendOPER(int operand,state *s){
+  s->count ++;
   s->operand = (s->operand<<6) | operand;
 }
 
+
 void opSwitch(int opcode, int operand, state *s){
-  if (operand > 31 && opcode < 2) operand = operand - 64;
   switch(opcode){
     case 0:
       extendOPER(operand, s);
+      s->operand = checkSign(s);
       s->dx = s->operand;
       s->operand = 0;
+      s->count = 0;
       break;
     case 1:
       extendOPER(operand, s);
+      s->operand = checkSign(s);
       draw(s);
+      s->count = 0;
       break;
     case 2:
-      extendOPER(operand, s);
+      extendOPER(operand,s);
       break;
   }
   if (opcode > 2){
