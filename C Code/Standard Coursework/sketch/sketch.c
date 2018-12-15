@@ -55,17 +55,20 @@ void draw(state *s){
 }
 
 void doSwitch(int operand, state*s){
-  printf("----%d, %d\n",(operand & 0x7), operand);
+  printf("case =  %d\n", operand);
   switch (operand){
     case 0:
       if (s->pen == false) s->pen = true;
       else s->pen = false;
       break;
     case 1:
-      s->dt = s->operand;
+      if (s->dt == 0)s->dt = s->operand;
       pause(s->display, s->dt);
+      s->operand = 0;
+      break;
     case 2:
       clear(s->display);
+      s->count = 0;
       break;
     case 3:
       key(s->display);
@@ -107,7 +110,6 @@ void opSwitch(int opcode, int operand, state *s){
       break;
     case 2:
       extendOPER(operand,s);
-      printf("%02lx\n",s->operand );
       break;
     case 3:
       // opcode = opcode &
