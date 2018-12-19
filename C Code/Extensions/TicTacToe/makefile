@@ -1,6 +1,6 @@
 default: main
 main: main.c
-	clang -std=c11 -Wall -pedantic -g $@.c logic.c -lSDL2 -o $@ \
+	clang -std=c11 -Wall -pedantic -g $@.c draw.c logic.c -lSDL2 -o $@ \
 		   -fsanitize=undefined -fsanitize=address
 
 

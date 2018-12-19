@@ -1,10 +1,10 @@
 #ifndef DEF_H_
 #define DEF_H_
 
-#define width 640
-#define height 480
-#define cellwidth (width/3)
-#define cellheight (height/3)
+#define gridwidth 640
+#define gridheight 480
+#define cellwidth (gridwidth/3)
+#define cellheight (gridheight/3)
 
 
 enum player { X, O, N };

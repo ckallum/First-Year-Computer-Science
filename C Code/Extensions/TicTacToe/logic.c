@@ -67,7 +67,7 @@ void addToGrid(Game *g, int row, int column){
   }
 }
 
-void userkey(Game *g, int row, int column){
+void userKey(Game *g, int row, int column){
   if(g->currentState == RUNNING){
     addToGrid(g, row, column);
   }
