@@ -39,7 +39,7 @@ void changeState(Game*g){
   else if (win(g) == O){
     g->currentState = OWIN;
   }
-  else if (win(g) == N && draw(g) == true){
+  else if (draw(g) == true){
     g->currentState = DRAW;
   }
 }
@@ -57,11 +57,13 @@ void reset(Game *g){
       g->grid[i][j] = N;
     }
   }
+  g->moves = 0;
 }
 
 void addToGrid(Game *g, int row, int column){
   if(g->grid[row][column] == N){
     g->grid[row][column] = g->currentPlayer;
+    g->moves++;
     switchplayer(g);
     changeState(g);
   }
