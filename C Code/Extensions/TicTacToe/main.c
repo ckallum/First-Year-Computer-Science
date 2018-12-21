@@ -57,7 +57,7 @@ int main(int n, char *args[n]){
     }
     I(SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255));
     I(SDL_RenderClear(renderer));
-    drawGame(renderer, game, window);
+    drawGame(renderer, game);
     SDL_RenderPresent(renderer);
 
   }

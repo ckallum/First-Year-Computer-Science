@@ -3,11 +3,11 @@
 #include <SDL2/SDL.h>
 
 const SDL_Color GridColour = {.r = 255, .g =255, .b =255};
-const SDL_Color XColour = {.r = 255, .g =255, .b =255};
+const SDL_Color XColour = {.r = 50, .g =255, .b =255};
 const SDL_Color OColour = {.r = 50, .g =100, .b =255};
 const SDL_Color DrawColour = {.r = 100, .g =100, .b =100};
 
-void drawGrid(SDL_Renderer *renderer, const SDL_Color *colour, SDL_Window *window){
+void drawGrid(SDL_Renderer *renderer, const SDL_Color *colour){
   SDL_SetRenderDrawColor(renderer, colour->r, colour->g, colour->b,255);
   for (int i = 1; i < 3; i++){
       SDL_RenderDrawLine(renderer, i*cellwidth, 0, i*cellwidth, gridheight);
@@ -17,39 +17,69 @@ void drawGrid(SDL_Renderer *renderer, const SDL_Color *colour, SDL_Window *windo
   }
 }
 
-void drawX(){
+void drawX(SDL_Renderer *renderer, int row, int column, const SDL_Color *colour){
 
 }
 
-void drawO(){
+void drawO(SDL_Renderer *renderer, int row, int column, const SDL_Color *colour){
 
 }
 
-void drawBoard(SDL_Renderer *render, const int *board, const SDL_Color *xcolor, const SDL_Color *ocolor){
-
+void drawBoard(int n, player board[n][n], SDL_Renderer *renderer, const SDL_Color *xcolour, const SDL_Color *ocolour){
+  for (int i = 0; i < 3; i++){
+    for (int j = 0; j < 3; j++){
+      switch(board[i][j]){
+        case(X):
+          drawX(renderer, i, j, xcolour);
+          break;
+        case(O):
+          drawX(renderer, i, j, ocolour);
+          break;
+    }
+    }
+  }
 }
 
-void drawRunning(SDL_Renderer *renderer, const Game *game, SDL_Window *window){
-  drawGrid(renderer, &GridColour, window);
+player *copyGrid(player temp, Game *games){
+  return 0;
 }
 
-void drawGameOver(SDL_Renderer *renderer, const Game *game, const SDL_Color *colour){
-
+void drawRunning(int n, SDL_Renderer *renderer, const Game *game){
+  drawGrid(renderer, &GridColour);
+  player temp[3][3];
+  for (int i = 0; i < 3; i++){
+    for (int j = 0; j < 3; j++){
+      temp[i][j] = game->grid[i][j];
+    }
+  }
+  drawBoard(n, temp, renderer, &XColour, &OColour);
 }
 
-void drawGame(SDL_Renderer *renderer, const Game *game, SDL_Window *window){
+void drawGameOver(int n, SDL_Renderer *renderer, const Game *game, const SDL_Color *colour){
+  drawGrid(renderer, colour);
+  player temp[3][3];
+  for (int i = 0; i < 3; i++){
+    for (int j = 0; j < 3; j++){
+      temp[i][j] = game->grid[i][j];
+    }
+  }
+  drawBoard(n, temp, renderer, colour, colour);
+}
+
+void drawGame(SDL_Renderer *renderer, const Game *game){
+  int n = 3;
   switch(game->currentState){
     case RUNNING:
-      drawRunning(renderer, game, window);
+      drawRunning(n, renderer, game);
       break;
     case XWIN:
-      drawGameOver(renderer, game, &XColour);
+      drawGameOver(n, renderer, game, &XColour);
       break;
     case OWIN:
-      drawGameOver(renderer, game, &OColour);
+      drawGameOver(n, renderer, game, &OColour);
       break;
     case DRAW:
-      drawGameOver(renderer, game, &DrawColour);
+      drawGameOver(n, renderer, game, &DrawColour);
       break;
   }
 }
