@@ -6,7 +6,7 @@
 #include "logic.h"
 #include "draw.h"
 
-
+//Initiates a new game structure
 Game *newGame() {
   Game *temp = malloc(sizeof(Game));
   for (int i = 0; i < 3; i++){
@@ -20,17 +20,18 @@ Game *newGame() {
   return temp;
 }
 
+//Standard SDL fail function
 static void fail() {
     fprintf(stderr, "Error: %s\n", SDL_GetError());
     SDL_Quit();
     exit(1);
 }
 
-// Check return values from SDL functions (Integer and Pointer versions).  These
-// make error handling less intrusive.
+// Functions to check return values from SDL functions to check for errors
 static int I(int n) { if (n < 0) fail(); return n; }
 static void *P(void *p) { if (p == NULL) fail(); return p; }
 
+//MAIN
 int main(int n, char *args[n]){
 
   I(SDL_Init(SDL_INIT_VIDEO));
@@ -50,14 +51,14 @@ int main(int n, char *args[n]){
           game->currentState = QUIT;
           break;
         case SDL_MOUSEBUTTONDOWN:
-          userKey(game,event->button.y/cellheight, event->button.x/cellwidth);
+          userKey(game,event->button.y/cellheight, event->button.x/cellwidth, window);//Calls function in logic.c when mouse button is pressed, find x,y relative to cell dimensions
           break;
         default:{};
       }
     }
     I(SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255));
     I(SDL_RenderClear(renderer));
-    drawGame(renderer, game);
+    drawGame(renderer, game);//Calls function in draw.c to render the game.
     SDL_RenderPresent(renderer);
 
   }
