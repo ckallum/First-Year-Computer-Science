@@ -11,13 +11,13 @@ void drawGrid(SDL_Renderer *renderer, const SDL_Color *colour){
   SDL_SetRenderDrawColor(renderer, colour->r, colour->g, colour->b,255);
   for (int i = 1; i < 3; i++){
       SDL_RenderDrawLine(renderer, i*cellwidth, 0, i*cellwidth, gridheight);
-      // SDL_UpdateWindowSurface(window);
       SDL_RenderDrawLine(renderer, 0, i*cellheight, gridwidth, i*cellheight);
-      // SDL_UpdateWindowSurface(window);
   }
 }
 
 void drawX(SDL_Renderer *renderer, int row, int column, const SDL_Color *colour){
+  SDL_SetRenderDrawColor(renderer, colour->r, colour->g,colour->b, 255);
+  SDL_RenderDrawLine(renderer, row*cellwidth, column*cellwidth, row*cellwidth*0.75, column*cellwidth *0.75);
 
 }
 
@@ -33,16 +33,13 @@ void drawBoard(int n, player board[n][n], SDL_Renderer *renderer, const SDL_Colo
           drawX(renderer, i, j, xcolour);
           break;
         case(O):
-          drawX(renderer, i, j, ocolour);
+          drawO(renderer, i, j, ocolour);
           break;
     }
     }
   }
 }
 
-player *copyGrid(player temp, Game *games){
-  return 0;
-}
 
 void drawRunning(int n, SDL_Renderer *renderer, const Game *game){
   drawGrid(renderer, &GridColour);
