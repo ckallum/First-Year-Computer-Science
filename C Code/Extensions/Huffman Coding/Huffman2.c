@@ -20,7 +20,7 @@ typedef struct node node;
 // Create an array of SIZE pointers to nodes. This acts as a map from character
 // codes to their nodes.
 node **newMap() {
-    node **map = malloc(SIZE * sizeof(node *));
+    node **map = malloc(SIZE * sizeof(node));
     for (int ch = 0; ch < SIZE; ch++) {
         map[ch] = malloc(sizeof(node));
         *map[ch] = (node) { ch, 0, NULL, NULL, "" };

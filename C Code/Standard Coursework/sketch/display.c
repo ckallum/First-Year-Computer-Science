@@ -1,7 +1,7 @@
 /* A small graphics module for line drawing, based on SDL.
 SDL_MAIN_HANDLED is defined before including SDL.h, and a setbuf call is
 included in newDisplay, in case this is used as the starting point for a
-program in a difficult environmaent. */
+program in a difficult environment. */
 #include "display.h"
 #define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>

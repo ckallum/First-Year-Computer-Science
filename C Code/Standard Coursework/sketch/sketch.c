@@ -55,14 +55,14 @@ void draw(state *s){
 }
 
 void doSwitch(int operand, state*s){
-  printf("case =  %d\n", operand);
+  // printf("case =  %d\n", operand);
   switch (operand){
     case 0:
       if (s->pen == false) s->pen = true;
       else s->pen = false;
       break;
     case 1:
-      if (s->dt == 0)s->dt = s->operand;
+      if (s->dt == 0) s->dt = s->operand;
       pause(s->display, s->dt);
       s->operand = 0;
       break;
@@ -121,7 +121,7 @@ void opSwitch(int opcode, int operand, state *s){
 void initiate(byte b, state *s){
   int opcode = getOP(b);
   int operand = getOPER(b);
-  printf("opcode = %d ,operand = %d  \n",opcode, operand);
+  // printf("opcode = %d ,operand = %d  \n",opcode, operand);
   opSwitch(opcode, operand, s);
 }
 
@@ -130,7 +130,7 @@ void run(char filename[], display *d){
   FILE *in = fopen(filename, "rb");
   byte b = fgetc(in);
   while (!feof(in)){
-    printf("%02x  ", b);
+    // printf("%02x  ", b);
     initiate(b,s);
     b = fgetc(in);
   }

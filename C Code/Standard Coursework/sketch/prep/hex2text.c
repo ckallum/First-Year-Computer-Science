@@ -19,11 +19,11 @@ void convert(char input[]){
 }
 
 // Convert an int into a hex string of 8 hex digits.
-void hex(int n, char s[3]) {
+void hex(int n, char s[8]) {
   char hexCheck[]= {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F','\0'};
-  s[2] = '\0';
-  for (int i = 0; i < 2 ; i++){
-    int j = (n >> (4*(1-i)) & 0xF);
+  s[7] = '\0';
+  for (int i = 0; i < 7 ; i++){
+    int j = (n >> (4*(6-i)) & 0xF);
     s[i] = hexCheck[j];
   }
 }
