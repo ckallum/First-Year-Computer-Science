@@ -74,25 +74,22 @@ public class Worksheet1{
         critter.eat(critter2);
 */
 // -------------------------------------------
-/*
+
         Vector2D a = new Vector2D(10.0, 10.0);
         Vector2D b = new Vector2D(12.0,13.0);
         Vector2D c = a.midpoint(b);
         System.out.println(c.toString());
-*/
+
 //--------------------------------------------
-        double x = new Vector2D(10.0, 10.0)
-                .add(new Vector2D(5.0, 5.0))
-                .midpoint(new Vector2D(5.0, 5.0))
-                .scale(3)
-                .dotProduct(new Vector2D(5.0, 5.0));
-        System.out.println(x);
+        // double x = new Vector2D(10.0, 10.0)
+        //         .add(new Vector2D(5.0, 5.0))
+        //         .midpoint(new Vector2D(5.0, 5.0))
+        //         .scale(3)
+        //         .dotProduct(new Vector2D(5.0, 5.0));
+        // System.out.println(x);
     }
 }
 
 //1.4a)A class is a container containing attributes and methods of a certain object. An object apart of a certain class is an instantiation of that class
 //1.4b)Primitives types only store raw values, a value of that primitive type isn't an object as it doesn't have methods and individual methods eg. it doesn't have a class hierarchy/superclass - independent. The value is stored by value. not by reference and it is stored directly on the stack.
 //1.4c)Null is a value that can be assigned to any data type that is non-primitive. It means a variable does not reference to any object or array. Objects references can't be null. These are used for class instance variables and array components.
-
-
-
