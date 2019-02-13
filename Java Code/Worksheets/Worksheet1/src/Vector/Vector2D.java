@@ -1,5 +1,3 @@
-
-
 public class Vector2D{
     final double x;
     final double y;
@@ -41,6 +39,5 @@ public class Vector2D{
         String string = "Vector2D("+ this.x +", " + this.y+")";
         return string;
     }
-
 
 }
