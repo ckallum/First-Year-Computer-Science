@@ -65,7 +65,7 @@ class Vector2D{
 
 }
 
-public class Worksheet1{
+class Run{
     public static void main(String[] args){
 /*
         Critter critter = new Critter("Cow");
