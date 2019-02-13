@@ -1,3 +1,5 @@
+package Intbox;
+
 class IntBox{
     int x;
 
@@ -27,7 +29,7 @@ class IntBox{
 
     @Override
     public String toString(){
-        String string = "IntBox("+this.x+")";
+        String string = "Intbox.IntBox("+this.x+")";
         return string;
     }
 }
