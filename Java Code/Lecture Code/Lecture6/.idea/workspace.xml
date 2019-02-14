@@ -2,46 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a6a48d3a-d15f-4c52-976e-2aea9424a9f0" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../Lecture 5/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Lecture 5/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 5/src/MammalsDoubleDispatch/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 5/src/MammalsDoubleDispatch/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 5/src/MammalsDoubleDispatch/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 5/src/MammalsDoubleDispatch/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 5/src/MammalsDoubleDispatch/Dog.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Lecture 5/src/MammalsDoubleDispatch/Dog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 5/src/MammalsDoubleDispatch/Dolphin.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Lecture 5/src/MammalsDoubleDispatch/Dolphin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 5/src/MammalsDoubleDispatch/Lion.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Lecture 5/src/MammalsDoubleDispatch/Lion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 5/src/MammalsDoubleDispatch/Mammal.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Lecture 5/src/MammalsDoubleDispatch/Mammal.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 5/src/MammalsDoubleDispatch/Runner.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Lecture 5/src/MammalsDoubleDispatch/Runner.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 5/src/MammalsDoubleDispatch/out/production/MammalsDoubleDispatch/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 5/src/MammalsDoubleDispatch/out/production/MammalsDoubleDispatch/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 5/src/MammalsDoubleDispatch/out/production/MammalsDoubleDispatch/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 5/src/MammalsDoubleDispatch/out/production/MammalsDoubleDispatch/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 5/src/MammalsDoubleDispatch/out/production/MammalsDoubleDispatch/Dog.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 5/src/MammalsDoubleDispatch/out/production/MammalsDoubleDispatch/Dolphin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 5/src/MammalsDoubleDispatch/out/production/MammalsDoubleDispatch/Lion.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 5/src/MammalsDoubleDispatch/out/production/MammalsDoubleDispatch/Mammal.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 5/src/MammalsDoubleDispatch/out/production/MammalsDoubleDispatch/Runner.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 6/RPS-Double Dispatch/RPS-Double Dispatch.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 6/RockPaperScissorsDoubleDispatch/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 6/RockPaperScissorsDoubleDispatch/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 6/RockPaperScissorsDoubleDispatch/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 6/RockPaperScissorsDoubleDispatch/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 6/RockPaperScissorsDoubleDispatch/Attack.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 6/RockPaperScissorsDoubleDispatch/Paper.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 6/RockPaperScissorsDoubleDispatch/Rock.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 6/RockPaperScissorsDoubleDispatch/RockPaperScissorsDoubleDispatch.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 6/RockPaperScissorsDoubleDispatch/Runner.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 6/RockPaperScissorsDoubleDispatch/Scissors.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 6/RockPaperScissorsDoubleDispatch/out/production/RockPaperScissorsDoubleDispatch/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 6/RockPaperScissorsDoubleDispatch/out/production/RockPaperScissorsDoubleDispatch/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 6/RockPaperScissorsDoubleDispatch/out/production/RockPaperScissorsDoubleDispatch/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 6/RockPaperScissorsDoubleDispatch/out/production/RockPaperScissorsDoubleDispatch/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 6/RockPaperScissorsDoubleDispatch/out/production/RockPaperScissorsDoubleDispatch/Attack.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 6/RockPaperScissorsDoubleDispatch/out/production/RockPaperScissorsDoubleDispatch/Paper.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 6/RockPaperScissorsDoubleDispatch/out/production/RockPaperScissorsDoubleDispatch/Rock.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 6/RockPaperScissorsDoubleDispatch/out/production/RockPaperScissorsDoubleDispatch/RockPaperScissorsDoubleDispatch.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 6/RockPaperScissorsDoubleDispatch/out/production/RockPaperScissorsDoubleDispatch/Runner.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lecture 6/RockPaperScissorsDoubleDispatch/out/production/RockPaperScissorsDoubleDispatch/Scissors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Attack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Attack.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -50,8 +11,18 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileEditorManager">
+    <leaf />
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../.." />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/src/Attack.java" />
+      </list>
+    </option>
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="67" />
@@ -66,24 +37,14 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="Lecture6" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Lecture6" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
+      <pane id="ProjectPane" />
       <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1550098959463" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1550100866274" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="project.structure.last.edited" value="Modules" />
@@ -103,6 +64,14 @@
     </option>
   </component>
   <component name="RunManager">
+    <configuration name="Runner" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="INCLUDE_PROVIDED_SCOPE" value="true" />
+      <option name="MAIN_CLASS_NAME" value="Runner" />
+      <module name="Lecture6" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <option name="INCLUDE_PROVIDED_SCOPE" value="true" />
       <option name="MAIN_CLASS_NAME" value="Runner" />
@@ -111,6 +80,11 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Runner" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -122,12 +96,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1550098765883</updated>
-      <workItem from="1550098771111" duration="6000" />
+      <workItem from="1550098771111" duration="2191000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="6000" />
+    <option name="totallyTimeSpent" value="2191000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="27" width="926" height="1053" extended-state="0" />
@@ -139,14 +113,15 @@
       <window_info id="Favorites" side_tool="true" />
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24942791" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Messages" />
       <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" />
-      <window_info anchor="bottom" id="Version Control" />
-      <window_info anchor="bottom" id="Terminal" />
+      <window_info anchor="bottom" id="Version Control" weight="0.32929516" />
+      <window_info anchor="bottom" id="Terminal" weight="0.32929516" />
       <window_info anchor="bottom" id="Event Log" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32929516" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -165,11 +140,122 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <option name="LAST_COMMIT_MESSAGE" value="" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/Runner.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="9" column="22" lean-forward="true" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Scissors.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="13" selection-start-column="13" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Attack.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="16">
+          <caret line="1" column="33" selection-start-line="1" selection-start-column="33" selection-end-line="1" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Paper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="13" selection-start-column="13" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Rock.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="13" selection-start-column="13" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+  </component>
   <component name="masterDetails">
     <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>No facets are configured</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>11</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>Lecture6</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.6" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
       <state key="ProjectJDKs.UI">
         <settings>
           <last-edited>11</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
           <splitter-proportions>
             <option name="proportions">
               <list>
