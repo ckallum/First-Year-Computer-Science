@@ -5,7 +5,7 @@ public class Zoo {
   }
 
   public String feed(Animal animal, Food food) {
-    //TODO: Insert code here!
-    return null;
+    String string = animal.eat(food);
+    return string;
   }
 }
