@@ -1,1 +1,1 @@
-*.rb linguist-language=C/Java/Haskell
+*.c linguist-language=Java
